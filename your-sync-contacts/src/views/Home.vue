@@ -12,7 +12,12 @@
 
         <div v-if="!syncContacts.loading">
           <div style="text-align: center;">
-            Đồng bộ lần cuối vào: {{ syncContacts.data.syncAt.toLocaleString() }}
+            <span v-if="syncContacts.data.syncAt">
+              Đồng bộ lần cuối vào: {{ syncContacts.data.syncAt.toLocaleString() }}
+            </span>
+            <span v-else>
+              Chưa từng được đồng bộ!
+            </span>
           </div>
 
           <div class="contact-item" v-for="(contact, index) in syncContacts.data.contacts" :key="index">
@@ -27,7 +32,10 @@
 
     </div>
     <div class="list-contacts">
-      <h3 class="type">Danh bạ Google</h3>
+      <h3 class="type">
+        Danh bạ Google 
+        <span v-if="!user.linkedGoogle">(chưa liên kết)</span>
+      </h3>
       
       <div class="contacts-btn">
         <span class="load-contacts-btn" @click="loadContacts('google')">Làm mới</span>
@@ -48,7 +56,10 @@
 
     </div>
     <div class="list-contacts">
-      <h3 class="type">Danh bạ Outlook</h3>
+      <h3 class="type">
+        Danh bạ Outlook 
+        <span v-if="!user.linkedOutlook">(chưa liên kết)</span>
+      </h3>
       
       <div class="contacts-btn">
         <span class="load-contacts-btn" @click="loadContacts('outlook')">Làm mới</span>
@@ -138,9 +149,9 @@ export default {
           });
           let response = await this.fetchContactFromApi('/google/contacts');
           this.googleContacts.data = response.data;
-        } catch(e) {
+        } catch(error) {
           // statements
-          console.log(e);
+          console.log(error.response.data);
         }
 
         this.googleContacts.loading = false;
@@ -155,9 +166,9 @@ export default {
           });
           let response = await this.fetchContactFromApi('/outlook/contacts');
           this.outlookContacts.data = response.data;
-        } catch(e) {
+        } catch(error) {
           // statements
-          console.log(e);
+          console.log(error.response.data);
         }
 
         this.outlookContacts.loading = false;
@@ -180,10 +191,14 @@ export default {
   created() {
     setTimeout( () => {
       this.fetchContactFromApi('/contacts')
-        .then( response => {
-          this.syncContacts.loading = false;
-          this.syncContacts.data.syncAt = new Date(response.data.syncAt);
+        .then( response => {          
+          if (response.data.syncAt === null) {
+            this.syncContacts.data.syncAt = null;
+          } else {
+            this.syncContacts.data.syncAt = new Date(response.data.syncAt);
+          }          
           this.syncContacts.data.contacts = response.data.contacts;
+          this.syncContacts.loading = false;
         } )
         .catch( () => {
           return;

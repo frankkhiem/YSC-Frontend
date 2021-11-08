@@ -1,23 +1,25 @@
 <template>
   <div class="login">
     <h1>This is an login page</h1>
-    <h3>Form đăng nhập</h3>
-    <form @submit.prevent='login'>
-      <div class="form-control">
-        <label for="email">Email</label>
-        <input id="email" type="email" v-model='email'>
-      </div>
-      <div class="form-control">
-        <label for="password">Password</label>
-        <input id="password" type="password" v-model='password'>
-      </div>
+    <div class="form-login">
+      <h3>Form đăng nhập</h3>
+      <form @submit.prevent='login'>
+        <div class="form-control">
+          <label for="email">Email</label>
+          <input id="email" type="email" v-model='email'>
+        </div>
+        <div class="form-control">
+          <label for="password">Mật khẩu</label>
+          <input id="password" type="password" v-model='password'>
+        </div>
+        <div>
+          <button type="submit">Đăng nhập</button>
+        </div>
+      </form>
+      <br><br>
       <div>
-        <button type="submit">Đăng nhập</button>
+        <router-link :to="{ name: 'Register'}">>> Đăng ký</router-link>
       </div>
-    </form>
-    <br><br>
-    <div>
-      <router-link :to="{ name: 'Register'}">>> Đăng ký</router-link>
     </div>
   </div>
 </template>
@@ -75,6 +77,16 @@ export default {
 }
 </script>
 <style scoped>
+.login > h1 {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.form-login {
+  width: 180px;
+  margin: 0 auto;
+}
+
 .form-control {
   margin-bottom: 1rem;
 }
