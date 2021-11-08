@@ -77,7 +77,6 @@
           </div>
         </div>  
       </div>
-
     </div>
   </div>
 </template>
@@ -130,9 +129,8 @@ export default {
 
         this.syncContacts.data.syncAt = new Date(response.data.syncAt);
         this.syncContacts.data.contacts = response.data.contacts;
-      } catch(e) {
-        // statements
-        console.log(e);
+      } catch(error) {
+        console.log(error.response.data);
       }
 
       this.syncContacts.loading = false;
@@ -150,7 +148,6 @@ export default {
           let response = await this.fetchContactFromApi('/google/contacts');
           this.googleContacts.data = response.data;
         } catch(error) {
-          // statements
           console.log(error.response.data);
         }
 
@@ -167,7 +164,6 @@ export default {
           let response = await this.fetchContactFromApi('/outlook/contacts');
           this.outlookContacts.data = response.data;
         } catch(error) {
-          // statements
           console.log(error.response.data);
         }
 
