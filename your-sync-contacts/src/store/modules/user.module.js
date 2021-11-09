@@ -23,6 +23,7 @@ const mutations = {
 
   logoutUser: (state) => {
     state.user = {};
+    localStorage.removeItem('accessToken');
   }
 };
 
@@ -41,12 +42,11 @@ const actions = {
     })
     .then( response => {
       commit('updateUser', response.data);
-      return;
     })
     .catch( () => {
       commit('logoutUser');
-      return;
     });
+    return;
   }
 };
 

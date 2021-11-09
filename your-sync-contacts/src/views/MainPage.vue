@@ -1,8 +1,13 @@
 <template>
   <div class="main">
     <section id="header">
-      <h4 class="user-name">{{ user.userName }} đang đăng nhập</h4>
-      <button @click="logout">Đăng xuất</button>
+      <router-link class="header-item" :to="{name: 'Home'}">
+        <h4 class="user-name">Trang chủ</h4>
+      </router-link>
+      <router-link class="header-item" :to="{name: 'Profile'}">
+        <h4 class="user-name">{{ user.userName }} đang đăng nhập</h4>
+      </router-link>
+      <button class="header-item" @click="logout">Đăng xuất</button>
     </section>
     <section id="content">
       <router-view></router-view>
@@ -36,7 +41,6 @@ export default {
     }),
 
     logout() {
-      localStorage.removeItem('accessToken');
       this.logoutUser();
       this.$router.push({ name: 'Login'});
     }
@@ -66,7 +70,7 @@ export default {
   align-items: center;
 }
 
-#header *{
+#header .header-item {
   margin-right: 20px;
 }
 
