@@ -219,7 +219,7 @@ export default {
         .catch( () => {
           return;
         });
-    }, 0);
+    }, 1000);
   },
   
 }
