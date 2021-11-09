@@ -112,6 +112,7 @@ export default {
   computed: {
     ...mapGetters({
       user: 'profile',
+      auth: 'userAuthenticated'
     }),
   },
 
@@ -185,6 +186,7 @@ export default {
   },
 
   created() {
+    if( localStorage.getItem("accessToken") === null ) return;
     setTimeout( () => {
       this.fetchContactFromApi('/contacts')
         .then( response => {          
@@ -217,8 +219,8 @@ export default {
         .catch( () => {
           return;
         });
-    }, 1500);
-  }
+    }, 0);
+  },
   
 }
 </script>
