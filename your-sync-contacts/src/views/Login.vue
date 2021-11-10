@@ -57,7 +57,7 @@ export default {
     }),
 
     login() {
-      axios.post(this.$backendBase + '/login', 
+      axios.post(this.$backendHost + '/login', 
       {
         email: this.email,
         password: this.password

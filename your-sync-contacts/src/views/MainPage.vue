@@ -51,7 +51,7 @@ export default {
       setTimeout( () => {
         if( !vm.auth ) next({ name: 'Login' });
         else next();
-      }, 500);
+      }, 1000);
     })
   },
   
@@ -75,7 +75,7 @@ export default {
 }
 
 #content {
-  min-height: 478px;
+  min-height: 526px;
 }
 
 #footer {

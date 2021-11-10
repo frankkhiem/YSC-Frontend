@@ -28,7 +28,7 @@ const mutations = {
 };
 
 const actions = {
-  fetchUser: ({ commit }) => {
+  fetchUser: async ({ commit }) => {
     if( localStorage.getItem('accessToken') === null ) {
       commit('logoutUser');
       return;

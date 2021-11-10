@@ -122,7 +122,7 @@ export default {
       this.syncContacts.loading = true;
 
       try {
-        let response = await axios.get(this.$backendBase + '/sync-contacts', {
+        let response = await axios.get(this.$backendHost + '/sync-contacts', {
           params: {
             accessToken: localStorage.getItem('accessToken')
           }
@@ -143,7 +143,7 @@ export default {
         this.googleContacts.loading = true;
 
         try {
-          await axios.post(this.$backendBase + '/google/load-contacts', {
+          await axios.post(this.$backendHost + '/google/load-contacts', {
             accessToken: localStorage.getItem('accessToken')
           });
           let response = await this.fetchContactFromApi('/google/contacts');
@@ -159,7 +159,7 @@ export default {
         this.outlookContacts.loading = true;
 
         try {
-          await axios.post(this.$backendBase + '/outlook/load-contacts', {
+          await axios.post(this.$backendHost + '/outlook/load-contacts', {
             accessToken: localStorage.getItem('accessToken')
           });
           let response = await this.fetchContactFromApi('/outlook/contacts');
@@ -176,7 +176,7 @@ export default {
     },
 
     fetchContactFromApi(path) {
-      let url = this.$backendBase + path;
+      let url = this.$backendHost + path;
       return axios.get(url,{
         params: {
             accessToken: localStorage.getItem('accessToken')
@@ -228,8 +228,7 @@ export default {
 <style scoped>
 .home {
   display: flex;
-  margin: 3rem 0;
-  padding: 0 2rem;
+  padding: 2rem;
 }
 
 .list-contacts {

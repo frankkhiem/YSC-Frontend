@@ -73,7 +73,7 @@ export default {
       }
 
       try {
-        let response = await axios.post(this.$backendBase + '/register', 
+        let response = await axios.post(this.$backendHost + '/register', 
         {
           username: this.userName,
           email: this.email,
