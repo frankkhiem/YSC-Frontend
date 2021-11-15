@@ -15,6 +15,9 @@ const gauthOption = {
 }
 Vue.use(GAuth, gauthOption)
 
+// config microsoft oauth
+
+
 new Vue({
   router,
   store,

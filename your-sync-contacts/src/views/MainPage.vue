@@ -1,6 +1,12 @@
 <template>
   <div class="main">
     <section id="header">
+      <div v-if="user.avatar === null">
+        <img src="https://i.pinimg.com/736x/8b/16/7a/8b167af653c2399dd93b952a48740620.jpg" alt="" class="avatar">
+      </div>
+      <div v-else>
+        <img :src="user.avatar" alt="" class="avatar">
+      </div>
       <router-link class="header-item" :to="{name: 'Home'}">
         <h4 class="user-name">Trang chủ</h4>
       </router-link>
@@ -71,6 +77,13 @@ export default {
 }
 
 #header .header-item {
+  margin-right: 20px;
+}
+
+#header .avatar {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
   margin-right: 20px;
 }
 

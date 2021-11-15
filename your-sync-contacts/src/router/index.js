@@ -38,6 +38,16 @@ const routes = [
     ]
   },
   {
+    path: '/outlook/get-auth-code',
+    name: 'Outlook Code',
+    component: () => import('../views/OutlookCode')
+  },
+  {
+    path: '/zalo/get-auth-code',
+    name: 'Zalo Code',
+    component: () => import('../views/ZaloCode')
+  },
+  {
     path: '/*',
     name: 'Not Found',
     component: () => import('../views/NotFoundPage')
