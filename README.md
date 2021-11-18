@@ -1,1 +1,1 @@
-# Fronend Project for Your Sync Contacts
+# Frontend Project for Your Sync Contacts
