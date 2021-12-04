@@ -1,40 +1,90 @@
 <template>
-  <div class="profile">
-    <h1>Trang thông tin cá nhân và liên kết tài khoản</h1>
-    <div class="user-info">
-      <h3>Đây là tài khoản của {{ user.userName }}</h3>
-      <input type="date" v-model="user.birthday">
-      <a href="#" @click.prevent="updateProfile">Cập nhật</a>
-    </div>
-    <div class="account">
-      <div class="google">
-        <h4>Tài khoản Google của bạn:</h4>
-        <button v-if="!user.linkedGoogle && !google.linking" @click="getAuthGoogle">Google</button>
-        <p v-else-if="google.linking">Đang tiến hành liên kết Google</p>
-        <p v-else>Google đã được liên kết</p>
-      </div>
-      <div class="outlook">
-        <h4>Tài khoản Outlook của bạn:</h4>
-        <button v-if="!user.linkedOutlook && !outlook.linking" @click="getAuthOutlook">Outlook</button>
-        <p v-else-if="outlook.linking">Đang tiến hành liên kết Outlook</p>
-        <p v-else>Outlook đã được liên kết</p>
-      </div>
-      <div class="zalo">
-        <h4>Tài khoản Zalo của bạn:</h4>
-        <button v-if="!user.linkedZalo" @click="getAuthZalo">Zalo</button>
-        <p v-else-if="user.linkedZalo && zalo.loading">Đang lấy hồ sơ Zalo</p>
-        <div v-else>
-          Zalo đã được liên kết: {{ zalo.name }}
-          <br>
-          <img :src="zalo.avatar">
-          <div v-if="user.avatar !== zalo.avatar">
-            <p>Bạn có muốn dùng ảnh Zalo làm avatar của mình</p>
-            <button @click="applyZaloAvatar">Áp dụng</button>
+<div> 
+  <section class="u-align-center-lg u-align-center-md u-align-center-xl u-align-left-sm u-align-left-xs u-clearfix u-section-2" id="sec-cdfa">
+      <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+        <h1 class="u-text u-text-1">{{this.user.userName}}</h1>
+        <p class="u-large-text u-text u-text-variant u-text-2"></p>
+        <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
+          <div class="u-layout">
+            <div class="u-layout-row">
+              <div class="u-container-style u-layout-cell u-size-20 u-layout-cell-1">
+                <div class="u-container-layout u-container-layout-1">
+                  <h4 class="u-text u-text-3">About me</h4>
+                  <p class="u-text u-text-default u-text-4">{{this.user.aboutMe}}&nbsp;</p>
+                </div>
+              </div>
+              <div class="u-align-center-md u-align-left-sm u-align-left-xs u-container-style u-layout-cell u-size-20 u-layout-cell-2">
+                <div class="u-container-layout u-valign-middle-lg u-valign-middle-xl u-valign-top-md u-valign-top-sm u-valign-top-xs u-container-layout-2">
+                  <img v-if="user.avatar==null" src="https://iupac.org/wp-content/uploads/2018/05/default-avatar.png" alt="" class="u-image u-image-circle u-image-1" data-image-width="700" data-image-height="700">
+                  <img v-else src="https://s120-ava-talk.zadn.vn/1/a/1/6/10/120/a4ed45a7588c417d805d2daf6..." alt="" class="u-image u-image-circle u-image-1" data-image-width="700" data-image-height="700"><br><br>
+                  <div class="middle">
+                    <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" style="font-size:13px;left: 45%;width: 85px;">
+                  </div>
+                  <h4 class="u-text u-text-3">Thông tin cá nhân</h4><br>
+                    <span style="font-weight: 600;">Email:{{this.user.email}} </span>
+                    <br>
+                    <span style="font-weight: 600;">Name:<span style="font-size: 16px;">{{this.user.userName}}</span> </span>
+                    <br>
+                    <span style="font-weight: 600;">Birthday:{{this.user.birthday}} </span><br>
+                    <button class="button-48" v-show="showModal==false" role="button" style="width:250px; left:17%;" @click="showModal=true"> <span class="text" >Sửa thông tin cá nhân</span></button>
+                </div>
+              </div>
+              <div class="u-container-style u-layout-cell u-size-20 u-layout-cell-3" style="padding-left: 50px;">
+                <div class="u-container-layout u-container-layout-3">
+                  <h4 class="u-text u-text-6">Liên kết các tài khoản:</h4>
+                <!-- Lien ket toi google -->
+                  <p class="u-text u-text-7">
+                    <span style="font-weight: 700;">Tài khoản Google của bạn: </span>
+                    <br>
+                  </p>
+                    <div v-if="!user.linkedGoogle && !google.linking" @click="getAuthGoogle">
+                      <a class="btn btn-lg btn-google btn-block text-uppercase btn-outline" href="#"><img src="https://img.icons8.com/color/48/000000/business-contact.png"/> Liên kết tới Google</a>
+                    </div>
+                      <p v-else-if="google.linking">Đang tiến hành liên kết Google</p>
+                      <p v-else>Google đã được liên kết</p><br>
+                    <!---->
+                    <!-- Lien ket toi outlook -->
+                    <span style="font-weight: 700;">Tài khoản Outlook của bạn: </span><br>
+                    <div v-if="!user.linkedOutlook && !outlook.linking" @click="getAuthOutlook">
+                      <a class="btn btn-lg btn-google btn-block text-uppercase btn-outline" target="_blank"><img src="https://img.icons8.com/color/48/000000/ms-outlook.png"/> Liên kết tới Outlook</a>
+                    </div>
+                      <p v-else-if="user.linkedZalo && zalo.loading">Đang tiến hành liên kết Outlook</p>
+                      <p v-else style="padding-top: 5px;">Outlook đã được liên kết</p>
+                    <!---->
+                      <br>
+                    <!--lien ket toi zalo-->
+                      <span style="font-weight: 700;">Tài khoản Zalo của bạn: </span>
+                    <div v-if="!user.linkedZalo" @click="getAuthZalo" target="_blank">
+                      <a class="btn btn-lg btn-google btn-block text-uppercase btn-outline" href="#"><img src="https://img.icons8.com/color/48/000000/zalo.png"/> Liên kết tới Zalo</a>
+                    </div>
+                      <p v-else-if="user.linkedZalo && zalo.loading">Đang tiến hành liên kết Zalo</p>
+                      <p v-else>Zalo đã được liên kết</p>   
+                    <!--them cac icon-->              
+                  <div class="u-social-icons u-spacing-10 u-social-icons-1">
+                    <img src="https://img.icons8.com/ios-filled/60/000000/new-contact.png" title="Google Contacts" width="30" height="30" style="margin-right: 10px;"/>
+                    <img src="https://img.icons8.com/ios-filled/60/000000/ms-outlook.png" title="Outlook" width="30" height="30" style="margin-right: 10px;"/>
+                    <img src="https://img.icons8.com/ios-filled/60/000000/zalo.png" width="30" height="30" title="Zalo"/>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+    </section>
+      <!-- Modal cap nhat thong tin -->
+    <div v-show="showModal==true" id="modalUpdate" >
+        <span class="close-button topright" @click="showModal=false">&#10060;</span>
+      <form>      
+        <input name="name" type="text" v-model="user.userName" class="feedback-input" placeholder="Name" />   
+        <input name="email" type="text" v-model="user.email" class="feedback-input emaildisabled" placeholder="Email" disabled/>
+        <input type="date" v-model="user.birthday"  class="feedback-input" placeholder="birthday"/>
+        <textarea name="text" v-model="user.aboutMe" class="feedback-input" placeholder="About"></textarea>
+        <input type="submit" @click.prevent="updateProfile" value="Cập nhật"/>
+      </form>
     </div>
-  </div>
+    <!---->
+</div>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex';
@@ -43,6 +93,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      showModal:false,
       google: {
         linking: false,
       },
@@ -174,6 +225,7 @@ export default {
         
         if( response.status === 200 ) {
           this.updateUser(this.user);
+          this.showModal=false;
         }
       } catch(e) {
         // statements
@@ -214,23 +266,8 @@ export default {
 }
 </script>
 <style>
-.user-info {
-  margin: 30px 0;
-}
-
-.account {
-  margin: 30px 0;
-}
-
-.account h4 {
-  margin-bottom: 10px;
-}
-
-.google {
-  margin-bottom: 3rem;
-}
-
-.outlook {
-  margin-bottom: 3rem;
-}
+@import "../assets/css/profile.css";
+@import "../assets/css/bootstrap.css";
+@import "../assets/css/modal.css";
 </style>
+
