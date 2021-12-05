@@ -50,9 +50,8 @@
                     <button type="submit">Đăng ký</button>
                 </div>
             </form>
-            <br><br>
             <div class="login-button">
-                <p>Bạn đã có tài khoản</p>
+                <p>Bạn đã có tài khoản?</p>
                 <router-link :to="{ name: 'Login'}"> Đăng nhập</router-link>
             </div>
             </div>
@@ -159,7 +158,7 @@ export default {
 }
 .register {
     width: 480px;
-    padding:  40px 60px;
+    padding:  25px 60px;
     background-color: #fff;
     border-radius: 12px;
 }
@@ -177,7 +176,7 @@ export default {
 
 .form-register {
     width: 100%;
-    min-height: 600px;
+    min-height: 560px;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -185,14 +184,14 @@ export default {
 .form-control {
     display: flex;
     flex-direction: column;
-    margin: 12px 0;
+    margin: 15px 0 0 0;
 }
 .form-control label {
     font-size: 14px;
     padding: 12px 0;
     color: #333;
     font-weight: 500;
-    margin: 8px 0;
+    margin: 8px 0 0 0;
 }
 .register-input-wrap {
     position: relative;
@@ -231,7 +230,7 @@ export default {
 .register-button {
   width: 100%;
   height: 48px; 
-  margin-top: 48px;
+  margin-top: 40px;
 }
 .register-button button {
   width: 100%;

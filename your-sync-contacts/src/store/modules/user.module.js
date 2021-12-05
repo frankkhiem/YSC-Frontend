@@ -34,7 +34,7 @@ const actions = {
       return;
     }
 
-    axios.get('http://192.168.40.131:11223/profile', 
+    axios.get('http://localhost:11223/profile', 
     {
       params: {
         accessToken: localStorage.getItem('accessToken')
