@@ -42,7 +42,7 @@
                     <p v-else-if="google.linking">Đang tiến hành liên kết Google</p>
                     <div v-else>
                       <p>Google đã được liên kết</p>
-                      <div class="unlink-btn" @click="unLink">
+                      <div class="unlink-btn" @click="unLink('google')">
                         Hủy liên kết
                       </div>
                     </div>
@@ -56,7 +56,7 @@
                     <p v-else-if="outlook.linking">Đang tiến hành liên kết Outlook</p>
                     <div v-else>
                       <p>Outlook đã được liên kết</p>
-                      <div class="unlink-btn" @click="unLink">
+                      <div class="unlink-btn" @click="unLink('outlook')">
                         Hủy liên kết
                       </div>
                     </div>
@@ -70,15 +70,22 @@
                     </div>
                     <p v-else-if="user.linkedZalo && zalo.loading">Đang tiến hành liên kết Zalo</p>
                     <div v-else>
-                      <p>{{ zalo.name }}</p>
-                      <div class="unlink-btn" @click="unLink">
+                      <div v-if="zalo.avatar !== user.avatar">
+                        <img class="zalo-avatar" :src="zalo.avatar">
+                        <span class="zalo-name">{{ zalo.name }}</span>
+                        <p class="zalo-option"><span @click="applyZaloAvatar">Dùng</span> ảnh Zalo làm avatar?</p>
+                      </div>
+                      <div v-else>
+                        <p><span class="zalo-name">{{ zalo.name }}</span> đã liên kết</p>
+                      </div>
+                      <div class="unlink-btn" @click="unLink('zalo')">
                         Hủy liên kết
                       </div>
                     </div>   
                     <!--them cac icon-->              
                   <div class="u-social-icons u-spacing-10 u-social-icons-1">
-                    <img src="https://img.icons8.com/ios-filled/60/000000/new-contact.png" title="Google Contacts" width="30" height="30" style="margin-right: 10px;"/>
-                    <img src="https://img.icons8.com/ios-filled/60/000000/ms-outlook.png" title="Outlook" width="30" height="30" style="margin-right: 10px;"/>
+                    <img src="https://img.icons8.com/ios-filled/60/000000/new-contact.png" title="Google Contacts" width="30" height="30" style="margin: 0 30px 0 40px;"/>
+                    <img src="https://img.icons8.com/ios-filled/60/000000/ms-outlook.png" title="Outlook" width="30" height="30" style="margin-right: 30px;"/>
                     <img src="https://img.icons8.com/ios-filled/60/000000/zalo.png" width="30" height="30" title="Zalo"/>
                   </div>
                 </div>
@@ -103,7 +110,7 @@
 </div>
 </template>
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -134,6 +141,10 @@ export default {
   methods: {
     ...mapMutations({
       updateUser: 'updateUser'
+    }),
+
+    ...mapActions({
+      refreshUser: 'fetchUser'
     }),
 
     async getAuthGoogle() {
@@ -250,8 +261,25 @@ export default {
       }
     },
 
-    unLink() {
-      alert('Hủy liên kết!');
+    async unLink(accType) {
+      if( accType === 'google' || accType === 'outlook' || accType === 'zalo' ) {
+        // console.log('Huy lien ket tai khoan');
+        try {
+          let response = await axios.get(this.$backendHost + `/${accType}/unlink`, {
+            params: {
+              accessToken: localStorage.getItem('accessToken')
+            }
+          });
+
+          if( response.data.success ) this.refreshUser();
+        } catch(e) {
+          // statements
+          console.log(e);
+        }
+      }
+      else {
+        alert('Đã xảy ra lỗi gì đó. Hãy đợi chúng tôi sửa chúng!');
+      }
     }
   },
 

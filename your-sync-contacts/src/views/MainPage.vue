@@ -58,4 +58,7 @@ export default {
 </script>
 
 <style scoped>
+#content {
+  min-height: calc(100vh - 200px);
+}
 </style>

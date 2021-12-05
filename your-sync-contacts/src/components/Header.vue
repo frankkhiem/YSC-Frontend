@@ -97,6 +97,7 @@ export default {
   border-radius: 10px;
   animation: myanimation-data-v-61dd7a3d 10s infinite;
   padding: 0 20px;
+  cursor: default;
 }
 @keyframes myanimation {
   0% {background-color: #3f79bb;}
