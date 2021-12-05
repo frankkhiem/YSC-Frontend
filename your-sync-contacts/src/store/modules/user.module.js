@@ -36,8 +36,7 @@ const actions = {
       return;
     }
 
-<<<<<<< HEAD
-    axios.get('http://192.168.0.104:11223/profile', 
+    axios.get('http://localhost:11223/profile', 
     {
       params: {
         accessToken: localStorage.getItem('accessToken')
@@ -49,19 +48,6 @@ const actions = {
     .catch( () => {
       commit('logoutUser');
     });
-=======
-    axios.get('http://192.168.0.104:11223/profile', {
-        params: {
-          accessToken: localStorage.getItem('accessToken')
-        }
-      })
-      .then(response => {
-        commit('updateUser', response.data);
-      })
-      .catch(() => {
-        commit('logoutUser');
-      });
->>>>>>> bc988076fdc4c74fdb8c6f078c821e0ce1c6966a
     return;
   }
 };

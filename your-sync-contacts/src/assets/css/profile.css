@@ -1,10 +1,10 @@
 .u-section-2 .u-sheet-1 {
-    min-height: 676px;
+    min-height: 550px;
 }
 
 .u-section-2 .u-text-1 {
     width: 525px;
-    margin: 60px auto 0;
+    margin: 30px auto 0;
 }
 
 .u-section-2 .u-text-2 {
@@ -13,8 +13,8 @@
 }
 
 .u-section-2 .u-layout-wrap-1 {
-    margin-top: 60px;
-    margin-bottom: 59px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     position: relative;
 }
 
@@ -55,8 +55,8 @@
 }
 
 .u-section-2 .u-image-1 {
-    width: 180px;
-    height: 180px;
+    width: 220px;
+    height: 220px;
     margin: 0 auto;
 }
 
@@ -68,8 +68,28 @@
     padding: 30px;
 }
 
+.u-section-2 .u-container-layout-3 .unlink-btn {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    width: 90px;
+    padding: 6px 2px;
+    margin: 4px 0 10px;
+    text-align: center;
+    font-size: 12px;
+    background-color: #ebebeb;
+    font-weight: 600;
+    color: #ed5f0b;
+    box-shadow: 0 2px 4px #00000047;
+    cursor: pointer;
+}
+
+.u-section-2 .u-container-layout-3 .unlink-btn:hover {
+    background-color: #f00;
+    color: #fff;
+}
+
 .u-section-2 .u-text-6 {
-    margin: 0;
+    margin: 0 0 20px;
 }
 
 .u-section-2 .u-text-7 {
@@ -84,6 +104,10 @@
     width: 91px;
     min-width: 68px;
     margin: 30px auto 0 0;
+}
+
+.u-section-2 .u-social-icons-1 img {
+    cursor: pointer;
 }
 
 .u-section-2 .u-icon-1 {

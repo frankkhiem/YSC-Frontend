@@ -3,29 +3,31 @@
   <section class="u-align-center-lg u-align-center-md u-align-center-xl u-align-left-sm u-align-left-xs u-clearfix u-section-2" id="sec-cdfa">
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
         <h1 class="u-text u-text-1">{{this.user.userName}}</h1>
-        <p class="u-large-text u-text u-text-variant u-text-2"></p>
+        <!-- <p class="u-large-text u-text u-text-variant u-text-2"></p> -->
         <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-1">
           <div class="u-layout">
             <div class="u-layout-row">
               <div class="u-container-style u-layout-cell u-size-20 u-layout-cell-1">
                 <div class="u-container-layout u-container-layout-1">
-                  <h4 class="u-text u-text-3">About me</h4>
+                  <h4 class="u-text u-text-3">About Me!</h4>
                   <p class="u-text u-text-default u-text-4">{{this.user.aboutMe}}&nbsp;</p>
                 </div>
               </div>
               <div class="u-align-center-md u-align-left-sm u-align-left-xs u-container-style u-layout-cell u-size-20 u-layout-cell-2">
                 <div class="u-container-layout u-valign-middle-lg u-valign-middle-xl u-valign-top-md u-valign-top-sm u-valign-top-xs u-container-layout-2">
                   <img v-if="user.avatar==null" src="https://iupac.org/wp-content/uploads/2018/05/default-avatar.png" alt="" class="u-image u-image-circle u-image-1" data-image-width="700" data-image-height="700">
-                  <img v-else src="https://s120-ava-talk.zadn.vn/1/a/1/6/10/120/a4ed45a7588c417d805d2daf6..." alt="" class="u-image u-image-circle u-image-1" data-image-width="700" data-image-height="700"><br><br>
+                  <img v-else :src="user.avatar" alt="" class="u-image u-image-circle u-image-1" data-image-width="700" data-image-height="700">
+                  <br><br>
                   <div class="middle">
                     <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" style="font-size:13px;left: 45%;width: 85px;">
                   </div>
-                  <h4 class="u-text u-text-3">Thông tin cá nhân</h4><br>
-                    <span style="font-weight: 600;">Email:{{this.user.email}} </span>
+                  <h4 class="u-text u-text-3" style="font-weight: 600;">Thông tin cá nhân</h4><br>
+                    <span><strong>Email: </strong>{{this.user.email}} </span>
                     <br>
-                    <span style="font-weight: 600;">Name:<span style="font-size: 16px;">{{this.user.userName}}</span> </span>
-                    <br>
-                    <span style="font-weight: 600;">Birthday:{{this.user.birthday}} </span><br>
+                    <!-- <span style="font-weight: 600;">Name:<span style="font-size: 16px;">{{this.user.userName}}</span> </span> -->
+                    <!-- <br> -->
+                    <span><strong>Ngày sinh: </strong>{{this.user.birthday | formatDate}}</span>
+                    <br><br>
                     <button class="button-48" v-show="showModal==false" role="button" style="width:250px; left:17%;" @click="showModal=true"> <span class="text" >Sửa thông tin cá nhân</span></button>
                 </div>
               </div>
@@ -33,23 +35,32 @@
                 <div class="u-container-layout u-container-layout-3">
                   <h4 class="u-text u-text-6">Liên kết các tài khoản:</h4>
                 <!-- Lien ket toi google -->
-                  <p class="u-text u-text-7">
-                    <span style="font-weight: 700;">Tài khoản Google của bạn: </span>
-                    <br>
-                  </p>
+                  <span style="font-weight: 700;">Tài khoản Google của bạn: </span>
                     <div v-if="!user.linkedGoogle && !google.linking" @click="getAuthGoogle">
-                      <a class="btn btn-lg btn-google btn-block text-uppercase btn-outline" href="#"><img src="https://img.icons8.com/color/48/000000/business-contact.png"/> Liên kết tới Google</a>
+                      <a class="btn btn-lg btn-google btn-block text-uppercase btn-outline" href="#"><img src="https://img.icons8.com/external-justicon-lineal-color-justicon/48/000000/external-google-social-media-justicon-lineal-color-justicon.png"/> Liên kết tới Google</a>
                     </div>
-                      <p v-else-if="google.linking">Đang tiến hành liên kết Google</p>
-                      <p v-else>Google đã được liên kết</p><br>
+                    <p v-else-if="google.linking">Đang tiến hành liên kết Google</p>
+                    <div v-else>
+                      <p>Google đã được liên kết</p>
+                      <div class="unlink-btn" @click="unLink">
+                        Hủy liên kết
+                      </div>
+                    </div>
+                    <br>
                     <!---->
                     <!-- Lien ket toi outlook -->
                     <span style="font-weight: 700;">Tài khoản Outlook của bạn: </span><br>
                     <div v-if="!user.linkedOutlook && !outlook.linking" @click="getAuthOutlook">
                       <a class="btn btn-lg btn-google btn-block text-uppercase btn-outline" target="_blank"><img src="https://img.icons8.com/color/48/000000/ms-outlook.png"/> Liên kết tới Outlook</a>
                     </div>
-                      <p v-else-if="user.linkedZalo && zalo.loading">Đang tiến hành liên kết Outlook</p>
-                      <p v-else style="padding-top: 5px;">Outlook đã được liên kết</p>
+                    <p v-else-if="user.linkedZalo && zalo.loading">Đang tiến hành liên kết Outlook</p>
+                    <div v-else>
+                      <p>Outlook đã được liên kết</p>
+                      <div class="unlink-btn" @click="unLink">
+                        Hủy liên kết
+                      </div>
+                    </div>
+
                     <!---->
                       <br>
                     <!--lien ket toi zalo-->
@@ -57,8 +68,13 @@
                     <div v-if="!user.linkedZalo" @click="getAuthZalo" target="_blank">
                       <a class="btn btn-lg btn-google btn-block text-uppercase btn-outline" href="#"><img src="https://img.icons8.com/color/48/000000/zalo.png"/> Liên kết tới Zalo</a>
                     </div>
-                      <p v-else-if="user.linkedZalo && zalo.loading">Đang tiến hành liên kết Zalo</p>
-                      <p v-else>Zalo đã được liên kết</p>   
+                    <p v-else-if="user.linkedZalo && zalo.loading">Đang tiến hành liên kết Zalo</p>
+                    <div v-else>
+                      <p>Zalo đã được liên kết</p>
+                      <div class="unlink-btn" @click="unLink">
+                        Hủy liên kết
+                      </div>
+                    </div>   
                     <!--them cac icon-->              
                   <div class="u-social-icons u-spacing-10 u-social-icons-1">
                     <img src="https://img.icons8.com/ios-filled/60/000000/new-contact.png" title="Google Contacts" width="30" height="30" style="margin-right: 10px;"/>
@@ -89,6 +105,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import axios from 'axios';
+import moment from 'moment';
 
 export default {
   data() {
@@ -231,6 +248,10 @@ export default {
         // statements
         console.log(e);
       }
+    },
+
+    unLink() {
+      alert('Hủy liên kết!');
     }
   },
 
@@ -261,6 +282,14 @@ export default {
     }
     else {
       console.log('Khong co yeu cau lien ket nao');
+    }
+  },
+
+  filters: {
+    formatDate: function(date) {
+      if (date) {
+        return moment(String(date)).format('DD-MM-YYYY');
+      }
     }
   }
 }
