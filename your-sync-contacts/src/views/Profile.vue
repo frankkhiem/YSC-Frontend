@@ -53,7 +53,7 @@
                     <div v-if="!user.linkedOutlook && !outlook.linking" @click="getAuthOutlook">
                       <a class="btn btn-lg btn-google btn-block text-uppercase btn-outline" target="_blank"><img src="https://img.icons8.com/color/48/000000/ms-outlook.png"/> Liên kết tới Outlook</a>
                     </div>
-                    <p v-else-if="user.linkedZalo && zalo.loading">Đang tiến hành liên kết Outlook</p>
+                    <p v-else-if="outlook.linking">Đang tiến hành liên kết Outlook</p>
                     <div v-else>
                       <p>Outlook đã được liên kết</p>
                       <div class="unlink-btn" @click="unLink">
@@ -70,7 +70,7 @@
                     </div>
                     <p v-else-if="user.linkedZalo && zalo.loading">Đang tiến hành liên kết Zalo</p>
                     <div v-else>
-                      <p>Zalo đã được liên kết</p>
+                      <p>{{ zalo.name }}</p>
                       <div class="unlink-btn" @click="unLink">
                         Hủy liên kết
                       </div>
@@ -294,9 +294,7 @@ export default {
   }
 }
 </script>
-<style>
-@import "../assets/css/profile.css";
-@import "../assets/css/bootstrap.css";
-@import "../assets/css/modal.css";
-</style>
 
+<style src="../assets/css/profile.css" scoped></style>
+<style src="../assets/css/bootstrap.css" scoped></style>
+<style src="../assets/css/modal.css" scoped></style>

@@ -5,7 +5,7 @@
         <router-link data-item='YSC' class="logo" :to="{name: 'Home'}">
           YSC
         </router-link>
-        <p class="sologan">The super telephone book</p>
+        <p class="sologan">The best solution for you</p>
         <ul class="menuItems">
           <li>
             <router-link data-item='Trang chủ' :to="{name: 'Home'}">
@@ -14,7 +14,7 @@
           </li>
           <li>
               <img v-if="user.avatar == null" class="avatar" src="https://www.w3schools.com/howto/img_avatar.png" @click="show_dropdown_menu = !show_dropdown_menu">
-              <img v-if="user.avatar != null" class="avatar" @mouseover="show_dropdown_menu = !show_dropdown_menu">
+              <img v-if="user.avatar != null" class="avatar" :src="user.avatar" @mouseover="show_dropdown_menu = !show_dropdown_menu">
           </li>
         </ul>
       </nav>
@@ -86,16 +86,17 @@ export default {
   font-family: Hack, monospace; }
 
 .header .sologan {
-  margin-left: 50px;
-  font-size: 60px;
+  margin: 15px 0 15px 50px;
+  font-size: 35px;
   color: #fdfafa;
   text-transform: uppercase;
   font-weight: 600;
-  top: -5px;
+  height: 60px;
+  line-height: 60px;
   position: relative;
   border-radius: 10px;
-  animation: myanimation 10s infinite;
-  padding: 10px 20px 0px 20px;
+  animation: myanimation-data-v-61dd7a3d 10s infinite;
+  padding: 0 20px;
 }
 @keyframes myanimation {
   0% {background-color: #3f79bb;}
