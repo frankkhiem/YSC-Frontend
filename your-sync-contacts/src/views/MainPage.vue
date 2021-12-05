@@ -47,7 +47,7 @@ export default {
       setTimeout( () => {
         if( !vm.auth ) next({ name: 'Login' });
         else next();
-      }, 500);
+      }, 1000);
     })
   },
   
