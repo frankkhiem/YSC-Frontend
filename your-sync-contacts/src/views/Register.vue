@@ -13,7 +13,7 @@
                         <i class="fa-solid fa-envelope input-icon"></i>
                     </div>
                     <div :class="{errorDisplay: isDisplayErrorEmail, errorMessage: true}">
-                        <span>Email đã không tồn tại</span>
+                        <span>Email đã tồn tại</span>
                         <i class="fa-solid fa-circle-exclamation"></i>
                     </div>
                 </div>
