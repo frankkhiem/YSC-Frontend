@@ -34,6 +34,11 @@ const routes = [
         path: 'profile',
         name: 'Profile',
         component: () => import('../views/Profile')
+      },
+      {
+        path: 'home-test',
+        name: 'HomeTest',
+        component: () => import('../views/HomeTest')
       }
     ]
   },
