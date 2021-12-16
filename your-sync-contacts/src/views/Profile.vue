@@ -15,12 +15,16 @@
               </div>
               <div class="u-align-center-md u-align-left-sm u-align-left-xs u-container-style u-layout-cell u-size-20 u-layout-cell-2">
                 <div class="u-container-layout u-valign-middle-lg u-valign-middle-xl u-valign-top-md u-valign-top-sm u-valign-top-xs u-container-layout-2">
-                  <img v-if="user.avatar==null" src="https://iupac.org/wp-content/uploads/2018/05/default-avatar.png" alt="" class="u-image u-image-circle u-image-1" data-image-width="700" data-image-height="700">
-                  <img v-else :src="user.avatar" alt="" class="u-image u-image-circle u-image-1" data-image-width="700" data-image-height="700">
-                  <br><br>
-                  <div class="middle">
-                    <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" style="font-size:13px;left: 45%;width: 85px;">
+                  <div class="avatar">
+                    <img v-if="user.avatar==null" src="https://iupac.org/wp-content/uploads/2018/05/default-avatar.png" alt="" class="u-image u-image-circle u-image-1" :class="{ updating: updateAvatar }" data-image-width="700" data-image-height="700">
+                    <img v-else :src="user.avatar" alt="" class="u-image u-image-circle u-image-1" :class="{ updating: updateAvatar }" data-image-width="700" data-image-height="700">
+                    <div class="edit-avatar">
+                      <input type="file" @change="editAvatar" ref="avatar" accept="image/*" style="display: none">
+                      <i class="far fa-edit edit-avatar-btn" @click="$refs.avatar.click()"></i>
+                    </div>
+                    <img v-if="updateAvatar" class="avatar-loading" src="@/assets/img/Spin-2s-204px.gif">
                   </div>
+                  <br><br>
                   <h4 class="u-text u-text-3" style="font-weight: 600;">Thông tin cá nhân</h4><br>
                     <span><strong>Email: </strong>{{this.user.email}} </span>
                     <br>
@@ -128,7 +132,8 @@ export default {
         loading: true,
         name: '',
         avatar: '',
-      }
+      },
+      updateAvatar: false,
     }
   },
 
@@ -236,6 +241,38 @@ export default {
           console.log('Loi lien ket Zalo roi');
         }
       }
+    },
+
+    async editAvatar() {
+      console.log('Thay doi avatar');
+      this.updateAvatar = true;
+
+      // Call API up ảnh lên Cloudinary
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      } 
+      
+      const API_ENDPOINT = 'https://api.cloudinary.com/v1_1/frankkhiem/image/upload';
+
+      let formData = new FormData();
+      formData.append('file', this.$refs.avatar.files[0]);
+      formData.append('upload_preset', 'upload_avatar');
+
+      try {
+        let response = await axios.post(API_ENDPOINT, formData, config);
+        let avatar_url = response.data.secure_url;
+        this.user.avatar = avatar_url;
+        this.updateProfile();        
+      } catch(e) {
+        // statements
+        console.log(e);
+      }
+      this.$refs.avatar.value = null;
+      setTimeout( () => {
+        this.updateAvatar = false;
+      }, 500);
     },
 
     applyZaloAvatar() {

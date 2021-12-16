@@ -202,27 +202,40 @@ textarea {
     backface-visibility: hidden;
 }
 
-.middle {
-    width: 60px;
-    transition: .5s ease;
-    opacity: 0;
-    position: absolute;
-    top: 37%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    text-align: center;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    padding-left: 3px;
-    padding-right: 3px;
-    border-radius: 10px;
-}
-
-.u-container-layout:hover .u-image {
+.u-image.updating {
     opacity: 0.3;
 }
 
-.u-container-layout:hover .middle {
+.edit-avatar {
+    position: absolute;
+    top: 110px;
+    left: calc(110px + 80px);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+}
+
+.edit-avatar .edit-avatar-btn {
+    font-size: 3rem;
+    cursor: pointer;
+    color: #0c24cd;
+}
+
+.edit-avatar .edit-avatar-btn:hover {
+    transform: scale(1.1);
+}
+
+.avatar:hover .u-image{
+    opacity: 0.3;
+}
+
+.avatar:hover .edit-avatar {
     opacity: 1;
+}
+
+.avatar-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 160px;
 }
