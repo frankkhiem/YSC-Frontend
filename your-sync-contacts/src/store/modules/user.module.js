@@ -36,18 +36,17 @@ const actions = {
       return;
     }
 
-    axios.get('http://localhost:11223/profile', 
-    {
-      params: {
-        accessToken: localStorage.getItem('accessToken')
-      }
-    })
-    .then( response => {
-      commit('updateUser', response.data);
-    })
-    .catch( () => {
-      commit('logoutUser');
-    });
+    axios.get('http://192.168.0.101:11223/profile', {
+        params: {
+          accessToken: localStorage.getItem('accessToken')
+        }
+      })
+      .then(response => {
+        commit('updateUser', response.data);
+      })
+      .catch(() => {
+        commit('logoutUser');
+      });
     return;
   }
 };
