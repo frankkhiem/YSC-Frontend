@@ -22,9 +22,9 @@
 				<div class="table-title">
 					<div class="row">
 						<div class="col-sm-7">
-							<b style="font-size:24px">YSC Contacts</b>
-              <a v-show="showSyncContacts && checkedContacts.length != 0" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Xóa liên lạc</span></a>						
-              <a v-show="showSyncContacts" @click="handleModalCreate()" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Thêm liên lạc</span></a>							
+							<b style="font-size:24px; float:left;">YSC Contacts</b>
+              <a v-show="showSyncContacts" @click="handleModalCreate()" class="btn btn-success" data-toggle="modal" style="float: left;"><i class="material-icons">&#xE147;</i> <span>Thêm liên lạc</span></a>
+              <a v-show="showSyncContacts && checkedContacts.length != 0" class="btn btn-danger" data-toggle="modal" style="float: left;"><i class="material-icons">&#xE15C;</i> <span>Xóa liên lạc</span></a>						             							
 						</div>
 						<div class="col-sm-5">						
 							<a v-if="showSyncContacts" @click="sync" class="btn btn-info" data-toggle="modal"><i class="fas fa-sync"></i> <span>Đồng bộ</span></a>
