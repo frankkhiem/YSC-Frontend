@@ -1,7 +1,41 @@
 <template>
   <div class="footer">
-    <div class="footer-copyright text-center">&copy; Developed with love by
-      <a href="#" class="white-text" target="_blank">"Group 6: KHyM, Đại Hiệp, bescam, NgọcĐX, NghĩaĐĐ"</a>.
+    <div class="top-footer">
+    </div>
+    <div class="bottom-footer">
+      <div class="footer-copyright">
+        <div class="permission">
+          &copy;2021 
+          <a class="company" href="#">Group 6. </a>
+          All right reserved
+        </div>
+        <div class="developer">
+          Developed by KHyM, Đại Hiệp, bescam, ĐĐNghĩa, ĐXNgọc
+        </div>
+      </div>
+      <div class="footer-payment"> 
+        <a href="#">
+          <img src="@/assets/img/paypal5.png">
+        </a>
+        <a href="#">
+          <img src="@/assets/img/paypal4.png">
+        </a>
+        <a href="#">
+          <img src="@/assets/img/paypal3.png">
+        </a>
+        <a href="#">
+          <img src="@/assets/img/paypal2.png">
+        </a>
+        <a href="#">
+          <img src="@/assets/img/paypal1.png">
+        </a>
+        <a href="#">
+          <img src="@/assets/img/paypal.png">
+        </a>
+        <div class="donate">        
+          Our Power, Donate Us!
+        </div> 
+      </div>
     </div>
   </div>
 </template>
@@ -16,23 +50,63 @@
   margin: 0; 
 }
 
-.footer {
+.top-footer {
+  height: 20px;
+  background-color: #ebeeee;
+  border-bottom: 1px solid #fff
+}
+
+.bottom-footer {
   /*position: absolute;*/
-  bottom: 0;
+  /*bottom: 0;*/
   width: 100%;
   height: 60px;
-  line-height: 60px;
-  font-size: 14px;
-  background-color: #f1f1f1;
-  color: #000000;
-  text-align: center; }
-.footer .footer-copyright {
- font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #ebeeee;
+  color: #707070;
+  align-items: center;
 }
-.footer a {
+
+.footer-copyright {
+  margin-left: 80px;
+}
+
+.footer-copyright .permission {
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
+.footer-copyright .developer {
+  font-size: 14px;
+}
+
+.footer-copyright .company {
   text-decoration: none;
-  color: inherit;
-  border-bottom: 1px solid; }
-.footer a:hover {
-  border-bottom: 1px transparent; }
+  margin: 0 2px;
+  color: #2c2c2c;
+  font-weight: 600;
+}
+
+.footer-copyright .company:hover {
+  color: #46b04a;
+}
+
+.footer-payment {
+  margin-right: 80px;
+}
+
+.footer-payment a {
+  text-decoration: none;
+  margin-left: 12px;
+}
+
+.footer-payment a:hover img {
+  filter: brightness(68%) contrast(100%) saturate(100%) blur(0px) hue-rotate(0deg);
+}
+
+.footer-payment .donate {
+  font-size: 14px;
+  padding-left: 12px;
+}
 </style>
