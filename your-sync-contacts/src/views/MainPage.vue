@@ -59,6 +59,6 @@ export default {
 
 <style scoped>
 #content {
-  min-height: calc(100vh - 200px);
+  min-height: calc(100vh - 220px);
 }
 </style>
