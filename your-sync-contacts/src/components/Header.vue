@@ -131,7 +131,7 @@ export default {
 
 .header nav {
   background: #f9f9f9;
-  padding: 25px;
+  padding: 5px 25px;
   display: flex;
   justify-content: space-between; }
 .header nav .menuItems {

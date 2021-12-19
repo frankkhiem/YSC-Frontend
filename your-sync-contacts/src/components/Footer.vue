@@ -50,6 +50,10 @@
   margin: 0; 
 }
 
+.footer {
+  margin-top: 40px;
+}
+
 .top-footer {
   height: 20px;
   background-color: #ebeeee;

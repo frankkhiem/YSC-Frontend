@@ -18,6 +18,14 @@ body {
     box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
 }
 
+.loading-contacts {
+    position: absolute;
+    width: 150px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
 .table-title {
     padding-bottom: 15px;
     background: #729dce;
@@ -264,11 +272,16 @@ table.table .avatar {
 
 .table-scroll {
     overflow: auto;
-    height: 319px;
+    min-height: 319px;
+    max-height: 500px;
 }
 
 .listcontact {
     position: sticky;
     /* top: 0; */
     /* background-color: #d0dae1; */
+}
+
+a.edit, a.delete {
+    cursor: pointer;
 }
