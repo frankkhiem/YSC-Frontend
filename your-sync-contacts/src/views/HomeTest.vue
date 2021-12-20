@@ -167,7 +167,7 @@
   <div v-if="typeContacts === 'google'" class="container-xl" style="padding-top: 25px;">
     <div class="table-responsive" style="margin: auto;">
       <div class="table-wrapper">
-        <div class="table-title" style="background-color: rgb(255 112 80 / 92%);">
+        <div class="table-title" style="background-color: #f3cd2ce6;">
           <div class="row">
             <div class="col-sm-7">
               <b style="font-size:24px; float:left;">Google Contacts</b>
@@ -179,7 +179,7 @@
           </div>
         </div>
         <div class="table-scroll"> 
-          <table class="table table-striped table-hover" style="margin-left:30px">
+          <table class="table table-striped table-hover">
             <thead class="listcontact">
               <tr>
                 <th>Tên liên lạc</th>
@@ -203,7 +203,7 @@
                     <div>Thông tin liên hệ</div>
                     <ul>
                       <li 
-                        v-for="(phoneNumber, index) in syncContacts.data[index].phoneNumbers"
+                        v-for="(phoneNumber, index) in googleContacts.data[index].phoneNumbers"
                         :key="index"
                       >
                         {{ phoneNumber }}
@@ -236,7 +236,7 @@
           </div>
         </div>
         <div class="table-scroll"> 
-          <table class="table table-striped table-hover" style="margin-left:20px">
+          <table class="table table-striped table-hover">
             <thead class="listcontact">
               <tr>
                 <th>Tên liên lạc</th>
@@ -260,7 +260,7 @@
                     <div>Thông tin liên hệ</div>
                     <ul>
                       <li 
-                        v-for="(phoneNumber, index) in syncContacts.data.contacts[index].phoneNumbers"
+                        v-for="(phoneNumber, index) in outlookContacts.data[index].phoneNumbers"
                         :key="index"
                       >
                         {{ phoneNumber }}
