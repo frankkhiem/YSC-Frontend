@@ -48,7 +48,12 @@
               </tr>
             </thead>
             <tbody v-if="!syncContacts.loading">
-              <tr  v-for="(contact, index) in syncContacts.data.contacts" :key="index" class="dropdown" >
+              <tr 
+                v-for="(contact, index) in syncContacts.data.contacts" 
+                :key="index" 
+                class="dropdown" 
+                :class="[showYSCContact[index] ? 'show' : '' ]"
+              >
                 <td>
                   <span class="custom-checkbox">
                     <input type="checkbox" id="checkbox1" @change="isDelete++" :value="contact.phoneName" v-model="checkedContacts" checked>
