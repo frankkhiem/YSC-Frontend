@@ -55,12 +55,29 @@
                     <label for="checkbox1"></label>
                   </span>
                 </td>
-                <td class="dropdown-toggle" @mouseover="showPhonesNumber(index)" @mouseleave="Phones = false">
-                  {{ contact.phoneName }}
+                <td @click="showContact(index)">
+                  <div 
+                    class="dropdown-toggle" 
+                    :class="[showYSCContact[index] ? 'reverse' : '' ]"
+                  >
+                    {{ contact.phoneName }}
+                  </div>
                   <span class="caret"></span>
                   <ul class="dropdown-menu" v-if="Phones && index==idPerson">
                     <li v-for="(phoneNumber, index) in syncContacts.data.contacts[index].phoneNumbers" :key="index"><a>{{phoneNumber}}</a></li>
                   </ul>
+
+                  <div v-show="showYSCContact[index]" class="phone-numbers"> 
+                    <div>Thông tin liên hệ</div>
+                    <ul>
+                      <li 
+                        v-for="(phoneNumber, index) in syncContacts.data.contacts[index].phoneNumbers"
+                        :key="index"
+                      >
+                        {{ phoneNumber }}
+                      </li>
+                    </ul>
+                  </div>
                 </td>
                 <td>
                   <a class="edit"  data-toggle="modal"><i @click="handleModalEdit(contact)" class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
@@ -69,68 +86,6 @@
               </tr>
             </tbody>
             <img v-else class="loading-contacts" src="@/assets/img/Spin-2s-204px.gif">
-          </table>
-          <!-- google ontact-->
-          <table class="table table-striped table-hover" v-if="showGoogleContacts">
-            <thead class="listcontact">
-              <tr>
-                <th>
-                  <span class="custom-checkbox">
-                    <input type="checkbox" id="selectAll">
-                    <label for="selectAll"></label>
-                  </span>
-                </th>
-                <th>Tên liên lạc</th>
-              </tr>
-            </thead>
-            <tbody v-if="!googleContacts.loading">
-              <tr  v-for="(contact, index) in googleContacts.data" :key="index" class="dropdown" >
-                <td>
-                  <span class="custom-checkbox">
-                    <input type="checkbox" id="checkbox1" @change="isDelete++" value="1">
-                    <label for="checkbox1"></label>
-                  </span>
-                </td>
-                <td class="dropdown-toggle" @mouseover="showPhonesNumber(index)" @mouseleave="Phones = false">
-                  {{ contact.phoneName }}
-                  <span class="caret"></span>
-                  <ul class="dropdown-menu" v-if="Phones && index==idPerson">
-                    <li v-for="(phoneNumber, index) in googleContacts.data[index].phoneNumbers" :key="index"><a>{{phoneNumber}}</a></li>
-                  </ul>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <!-- outlookcontact-->
-          <table class="table table-striped table-hover" v-if="showOutlookContacts">
-            <thead class="listcontact">
-              <tr>
-                <th>
-                  <span class="custom-checkbox">
-                    <input type="checkbox" id="selectAll">
-                    <label for="selectAll"></label>
-                  </span>
-                </th>
-                <th>Tên liên lạc</th>
-              </tr>
-            </thead>
-            <tbody v-if="!outlookContacts.loading">
-              <tr  v-for="(contact, index) in outlookContacts.data" :key="index" class="dropdown" >
-                <td>
-                  <span class="custom-checkbox">
-                    <input type="checkbox" id="checkbox1" @change="isDelete++" value="1">
-                    <label for="checkbox1"></label>
-                  </span>
-                </td>
-                <td class="dropdown-toggle" @mouseover="showPhonesNumber(index)" @mouseleave="Phones = false">
-                  {{ contact.phoneName }}
-                  <span class="caret"></span>
-                  <ul class="dropdown-menu" v-if="Phones && index==idPerson">
-                    <li v-for="(phoneNumber, index) in outlookContacts.data[index].phoneNumbers" :key="index"><a>{{phoneNumber}}</a></li>
-                  </ul>
-                </td>
-              </tr>
-            </tbody>
           </table>
         </div>
       </div>
@@ -335,6 +290,7 @@ export default {
       showOutlookContacts: false,
       checkedContacts: [],
       allSelected: false,
+      showYSCContact: [],
 
       typeContacts: 'YSC',  
       syncContacts: {
@@ -370,6 +326,11 @@ export default {
   },
 
   methods: {
+    showContact(index) {
+      console.log(index);
+      this.$set(this.showYSCContact, index, !this.showYSCContact[index]);
+    },
+
     async sync() {
       console.log('Dong bo danh ba nguoi dung');
       this.syncContacts.loading = true;
@@ -425,6 +386,9 @@ export default {
             this.syncContacts.data.syncAt = new Date(response.data.syncAt);
           }          
           this.syncContacts.data.contacts = response.data.contacts;
+          for( var i = 0; i < response.data.contacts.length; i++ ) {
+            this.showYSCContact[i] = false;
+          }
         } catch(e) {
           // statements
           console.log(e);
@@ -647,7 +611,14 @@ export default {
         console.log("Outlook");
         this.refreshOutlookContacts();
       }
-    }
+    },
+
+    // showYSCContact() {
+    //   handler: function (val, oldVal) {
+    //     console.log(val);
+    //   },
+    //   deep: true
+    // }
   }
 }
 </script>

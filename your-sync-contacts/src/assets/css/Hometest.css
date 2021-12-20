@@ -285,3 +285,32 @@ table.table .avatar {
 a.edit, a.delete {
     cursor: pointer;
 }
+
+.phone-numbers {
+    display: flex;
+    margin-top: 10px;
+}
+
+.phone-numbers div {
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 30px;
+    margin-right: 100px;
+    color: #4c76a9;
+}
+
+.phone-numbers ul {
+    list-style: none;
+    padding-top: 20px;
+}
+
+.phone-numbers li {
+    cursor: pointer;
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #4a403d;
+}
+
+.phone-numbers li:hover {
+    color: #2962ff;
+}
