@@ -70,10 +70,6 @@
                   >
                     {{ contact.phoneName }}
                   </div>
-                  <span class="caret"></span>
-                  <ul v-if="Phones[index]">
-                    <li v-for="(phoneNumber, index) in syncContacts.data.contacts[index].phoneNumbers" :key="index"><a>{{phoneNumber}}</a></li>
-                  </ul>
 
                   <div v-show="showYSCContact[index]" class="phone-numbers"> 
                     <div>Thông tin liên hệ</div>
@@ -195,14 +191,14 @@
                   </div>
                   <span class="caret"></span>
                   <ul v-if="Phones[index]">
-                    <li v-for="(phoneNumber, index) in syncContacts.data.contacts[index].phoneNumbers" :key="index"><a>{{phoneNumber}}</a></li>
+                    <li v-for="(phoneNumber, index) in googleContacts.data[index].phoneNumbers" :key="index"><a>{{phoneNumber}}</a></li>
                   </ul>
 
                   <div v-show="showYSCContact[index]" class="phone-numbers"> 
                     <div>Thông tin liên hệ</div>
                     <ul>
                       <li 
-                        v-for="(phoneNumber, index) in syncContacts.data.contacts[index].phoneNumbers"
+                        v-for="(phoneNumber, index) in syncContacts.data[index].phoneNumbers"
                         :key="index"
                       >
                         {{ phoneNumber }}
