@@ -33,12 +33,12 @@
             </div>
           </div>
         </div>
-        <div style="text-align: left; padding-bottom: 2px; padding-left:5px">
+        <div style="text-align: left; padding-bottom: 4px; padding-left:14px">
             <span v-if="syncContacts.data.syncAt">
               <b>Đồng bộ lần cuối vào: {{ syncContacts.data.syncAt.toLocaleString() }}</b>
             </span>
             <span v-else>
-              Chưa từng được đồng bộ!
+              <b>Chưa từng được đồng bộ!</b>
             </span>
           </div>
         <div class="table-scroll"> 
@@ -118,7 +118,7 @@
                 <input type="text" name="phoneName" class="form-control" v-model="newContact.phoneNumbers[0]" required>
               </div>
               <div v-for="index in addPhoneNumber" :key="index" class="form-group">
-                <i @click="addPhoneNumber--; newContact.phoneNumbers.splice(index, 1);" class="fas fa-trash" style="float: right; margin-top: 9px;"></i>
+                <i @click="addPhoneNumber--; newContact.phoneNumbers.splice(index, 1);" class="fas fa-minus-circle" style="float: right; margin-top: 9px;"></i>
                 <input type="text" class="form-control" v-model="newContact.phoneNumbers[index]" required>
               </div>            
             </div>
@@ -148,7 +148,7 @@
                 <label style="padding-right: 7px;">Số điện thoại</label> <i @click="addPhoneNumberEdit++" class="fas fa-plus-circle"></i>
               </div>
               <div v-for="index in addPhoneNumberEdit" :key="index" class="form-group">
-                <i v-if="index != 1" @click="addPhoneNumberEdit--; oldContact.phoneNumbers.splice(index-1, 1);" class="fas fa-trash" style="float: right; margin-top: 9px;"></i>
+                <i v-if="index != 1" @click="addPhoneNumberEdit--; oldContact.phoneNumbers.splice(index-1, 1);" class="fas fa-minus-circle" style="float: right; margin-top: 9px;"></i>
                 <input type="text" class="form-control" v-model="oldContact.phoneNumbers[index-1]" required>
               </div>            
             </div>
@@ -166,7 +166,7 @@
   <div v-if="typeContacts === 'google'" class="container-xl" style="padding-top: 25px;">
     <div class="table-responsive" style="margin: auto;">
       <div class="table-wrapper">
-        <div class="table-title" style="background-color: #4285f4">
+        <div class="table-title" style="background-color: rgb(255 112 80 / 92%);">
           <div class="row">
             <div class="col-sm-7">
               <b style="font-size:24px; float:left;">Google Contacts</b>
@@ -178,7 +178,7 @@
           </div>
         </div>
         <div class="table-scroll"> 
-          <table class="table table-striped table-hover">
+          <table class="table table-striped table-hover" style="margin-left:30px">
             <thead class="listcontact">
               <tr>
                 <th>Tên liên lạc</th>
@@ -186,12 +186,29 @@
             </thead>
             <tbody v-if="!googleContacts.loading">
               <tr  v-for="(contact, index) in googleContacts.data" :key="index" class="dropdown" >
-                <td class="dropdown-toggle" @mouseover="showPhonesNumber(index)" @mouseleave="Phones = false">
-                  {{ contact.phoneName }}
+                <td @click="showContact(index)">
+                  <div 
+                    class="dropdown-toggle" 
+                    :class="[showYSCContact[index] ? 'reverse' : '' ]"
+                  >
+                    {{ contact.phoneName }}
+                  </div>
                   <span class="caret"></span>
-                  <ul class="dropdown-menu" v-if="Phones && index==idPerson">
-                    <li v-for="(phoneNumber, index) in googleContacts.data[index].phoneNumbers" :key="index"><a>{{phoneNumber}}</a></li>
+                  <ul v-if="Phones[index]">
+                    <li v-for="(phoneNumber, index) in syncContacts.data.contacts[index].phoneNumbers" :key="index"><a>{{phoneNumber}}</a></li>
                   </ul>
+
+                  <div v-show="showYSCContact[index]" class="phone-numbers"> 
+                    <div>Thông tin liên hệ</div>
+                    <ul>
+                      <li 
+                        v-for="(phoneNumber, index) in syncContacts.data.contacts[index].phoneNumbers"
+                        :key="index"
+                      >
+                        {{ phoneNumber }}
+                      </li>
+                    </ul>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -206,7 +223,7 @@
   <div v-if="typeContacts === 'outlook'" class="container-xl" style="padding-top: 25px;">
     <div class="table-responsive" style="margin: auto;">
       <div class="table-wrapper">
-        <div class="table-title" style="background-color: rgb(125 173 254);">
+        <div class="table-title" style="background-color: #4285f4">
           <div class="row">
             <div class="col-sm-7">
               <b style="font-size:24px; float:left;">Outlook Contacts</b>                            
@@ -218,7 +235,7 @@
           </div>
         </div>
         <div class="table-scroll"> 
-          <table class="table table-striped table-hover">
+          <table class="table table-striped table-hover" style="margin-left:20px">
             <thead class="listcontact">
               <tr>
                 <th>Tên liên lạc</th>
@@ -226,12 +243,29 @@
             </thead>
             <tbody v-if="!outlookContacts.loading">
               <tr  v-for="(contact, index) in outlookContacts.data" :key="index" class="dropdown" >
-                <td class="dropdown-toggle" @mouseover="showPhonesNumber(index)" @mouseleave="Phones = false">
-                  {{ contact.phoneName }}
+                <td @click="showContact(index)">
+                  <div 
+                    class="dropdown-toggle" 
+                    :class="[showYSCContact[index] ? 'reverse' : '' ]"
+                  >
+                    {{ contact.phoneName }}
+                  </div>
                   <span class="caret"></span>
-                  <ul class="dropdown-menu" v-if="Phones && index==idPerson">
-                    <li v-for="(phoneNumber, index) in outlookContacts.data[index].phoneNumbers" :key="index"><a>{{phoneNumber}}</a></li>
+                  <ul v-if="Phones[index]">
+                    <li v-for="(phoneNumber, index) in syncContacts.data.contacts[index].phoneNumbers" :key="index"><a>{{phoneNumber}}</a></li>
                   </ul>
+
+                  <div v-show="showYSCContact[index]" class="phone-numbers"> 
+                    <div>Thông tin liên hệ</div>
+                    <ul>
+                      <li 
+                        v-for="(phoneNumber, index) in syncContacts.data.contacts[index].phoneNumbers"
+                        :key="index"
+                      >
+                        {{ phoneNumber }}
+                      </li>
+                    </ul>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -312,7 +346,6 @@ export default {
 
   methods: {
     showContact(index) {
-      console.log(index);
       this.$set(this.showYSCContact, index, !this.showYSCContact[index]);
     },
 
@@ -567,20 +600,9 @@ export default {
       }
     },// tick de chon tat ca cac lien he
 
-    showPhonesNumber($index){
-      if(this.Phones[$index] == false)
-      {
-        this.Phones[$index]=true;
-      }
-      else
-      {
-        this.Phones[$index]=false;
-      }
-    },//chi hien so dien thoai cua duy nhat lien he do khi tro vao lien he
   },
 
   created() {
-    this.Phones = new Array(50).fill(false);
     if( localStorage.getItem("accessToken") === null ) return;
     this.syncContacts.loading = true;
     setTimeout( async () => {

@@ -274,6 +274,7 @@ table.table .avatar {
     overflow: auto;
     min-height: 319px;
     max-height: 500px;
+    overflow-x: hidden;
 }
 
 .listcontact {
@@ -282,7 +283,8 @@ table.table .avatar {
     /* background-color: #d0dae1; */
 }
 
-a.edit, a.delete {
+a.edit,
+a.delete {
     cursor: pointer;
 }
 
@@ -314,3 +316,23 @@ a.edit, a.delete {
 .phone-numbers li:hover {
     color: #2962ff;
 }
+
+/* style scroll bar */
+.table-scroll::-webkit-scrollbar-track {
+    /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+.table-scroll::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3); */
+    background-color: #c1c1c1;
+}
+
+/* dịch table scroll sang phai */
