@@ -467,7 +467,7 @@ export default {
       }
       else if( type === 'YSC' ) {
         // console.log('Load danh ba YSC');
-        this.checkedContacts = [];
+        
         try {
           let response = await this.fetchContactFromApi('/contacts');
           if (response.data.syncAt === null) {
@@ -500,6 +500,7 @@ export default {
     },
 
     async refreshYSCContacts() {
+      this.checkedContacts = [];
       this.syncContacts.loading = true;
       await this.loadContacts('YSC');
       this.syncContacts.loading = false;
