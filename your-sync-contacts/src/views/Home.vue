@@ -368,7 +368,6 @@ export default {
       checkedContacts: [],
       allSelected: false,
       showContacts: [],
-
       typeContacts: 'YSC',  
       syncContacts: {
         loading: false,
@@ -541,6 +540,9 @@ export default {
           this.showModalCreate = false;
           this.refreshYSCContacts();
         }
+        else {
+          console.log(response.data);
+        }
       } catch(e) {
         // statements
         console.log(e);
@@ -552,7 +554,7 @@ export default {
     },
 
     //show modal update va update contact
-    handleModalEdit(contact){
+    handleModalEdit(contact) {
       this.showModalEdit = true;
       this.oldContact.oldPhoneName = contact.phoneName;
       this.oldContact.newPhoneName = contact.phoneName;
@@ -574,6 +576,9 @@ export default {
         if( response.data.success ) {
           this.showModalEdit = false;
           this.refreshYSCContacts();
+        }
+        else {
+          console.log(response.data);
         }
       } catch(e) {
         // statements
@@ -624,25 +629,6 @@ export default {
         this.checkedContacts = [];
       };
       this.customConfirm(message, deleteCallback);
-
-      // let accept = confirm(`Bạn có chắc muốn xóa những liên hệ này khỏi danh bạ không?`);
-      // if( accept ) {
-      //   try {
-      //     let response = await axios.post(this.$backendHost + '/contact/delete-multiple',{
-      //       accessToken: localStorage.getItem('accessToken'),
-      //       listPhoneNames: this.checkedContacts
-      //     });
-
-      //     if( response.data.success ) {
-      //       this.refreshYSCContacts();
-      //     }
-      //   } catch(e) {
-      //     // statements
-      //     console.log(e);
-      //   }
-      // }
-      // this.checkedContacts = []
-      // this.$refs.selectAll.checked = false;
     },
 
     // đồng bộ ngược Google
