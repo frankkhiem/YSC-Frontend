@@ -95,16 +95,17 @@ export default {
   line-height: 60px;
   position: relative;
   border-radius: 10px;
-  animation: myanimation-data-v-61dd7a3d 10s infinite;
+  animation: myanimation-data-v-61dd7a3d 15s infinite;
   padding: 0 20px;
   cursor: default;
 }
 @keyframes myanimation {
-  0% {background-color: #3f79bb;}
-  25%{background-color:#d6d657;}
-  50%{background-color:#58c458;}
-  75%{background-color:#d15b5b;}
-  100% {background-color: #d13c3c;}
+  0%{background-color: #3f79bb;}
+  20%{background-color:#d6d657;}
+  40%{background-color:#58c458;}
+  60%{background-color:#d15b5b;}
+  80%{background-color: #d13c3c;}
+  100%{background-color: #3f79bb;}
 }
 .header .logo {
   margin-left: 50px;
