@@ -732,7 +732,7 @@ export default {
     },
 
     checkedContacts(arrayChecked) {
-      if( arrayChecked.length === this.syncContacts.data.contacts.length ) {
+      if( arrayChecked.length !== 0 && arrayChecked.length === this.syncContacts.data.contacts.length ) {
         this.allSelected = true;
       }
       else {
