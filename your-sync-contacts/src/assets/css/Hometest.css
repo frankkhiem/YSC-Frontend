@@ -527,4 +527,13 @@ i.fas,
 
 .iconService {
     padding-left: 45px !important;
+    width: 15%;
+}
+
+.gg {
+    background-color: #cf6a68;
+}
+
+.ol {
+    background-color: #65c556
 }

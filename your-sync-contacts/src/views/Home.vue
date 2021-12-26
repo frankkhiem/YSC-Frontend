@@ -202,7 +202,7 @@
             <div v-if="typeContacts === 'google'" class="container-xl">
               <div class="table-responsive">
                 <div class="table-wrapper">
-                  <div class="table-title" style="background-color: #cf6a68;">
+                  <div class="table-title gg">
                     <div class="row">
                       <div class="col-sm-7 left">
                         <b>Google Contacts</b>
@@ -275,7 +275,7 @@
             <div v-if="typeContacts === 'outlook'" class="container-xl">
               <div class="table-responsive">
                 <div class="table-wrapper">
-                  <div class="table-title" style="background-color: #65c556">
+                  <div class="table-title ol">
                     <div class="row">
                       <div class="col-sm-7">
                         <b class="outlookct">Outlook Contacts</b>                      
