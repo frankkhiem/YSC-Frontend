@@ -408,12 +408,12 @@ i.fas,
     color: #174ea6;
     font-size: 1rem;
     font-weight: 600;
-    cursor: pointer;    
+    cursor: pointer;
     margin-right: 3px;
 }
 
 .confirm-btns .cancel-btn:hover {
-   background-color: #e9f0f7; 
+    background-color: #e9f0f7;
 }
 
 .confirm-btns .agree-btn {
@@ -447,4 +447,84 @@ i.fas,
 
 .not-linked__link:hover {
     text-decoration: none;
+}
+
+/* transition cho list so dien thoai */
+.fade-enter-active {
+    transition: opacity 1s;
+}
+
+.fade-leave-active {
+    transition: opacity .4s;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}
+
+/**/
+.nameExist {
+    color: red;
+    margin-left: 15px;
+    font-weight: bold;
+}
+
+/* chuyen inline */
+.container-xl {
+    padding-top: 25px;
+}
+
+.left b {
+    float: left !important;
+    font-size: 24px;
+}
+
+.btn-success {
+    float: left !important;
+}
+
+.btn-danger {
+    float: left !important;
+}
+
+.syncdata {
+    text-align: center;
+    margin: 14px 0 12px;
+}
+
+.Phone {
+    padding-right: 7px;
+}
+
+.fa-minus-circle {
+    float: right;
+    margin-top: 9px;
+}
+
+.addPhone {
+    float: right;
+    margin-top: 36px;
+}
+
+.table-responsive {
+    margin: auto;
+}
+
+.outlookct {
+    font-size: 24px !important;
+    float: left !important;
+}
+
+.nameCT {
+    padding-left: 0px !important;
+}
+
+.icon {
+    border-right-width: -10;
+    width: 65px;
+}
+
+.iconService {
+    padding-left: 45px !important;
 }

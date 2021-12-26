@@ -5,7 +5,7 @@ import store from './store'
 import GAuth from 'vue-google-oauth2'
 
 Vue.config.productionTip = false
-Vue.prototype.$backendHost = 'http://localhost:11223'
+Vue.prototype.$backendHost = 'http://192.168.0.103:11223'
 
 // config google oauth
 const gauthOption = {

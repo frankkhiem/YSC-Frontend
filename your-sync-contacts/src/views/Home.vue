@@ -19,15 +19,15 @@
           <!-- paste cái bảng ysc-contact vào đây.chỉnh sửa tý cho giốngcái bảng mẫu ysc-contact. paste xong nhớ bảng ví dụ xóa đi -->
 
             <!-- syncontact-->
-            <div v-if="typeContacts === 'YSC'" class="container-xl" style="padding-top: 25px;">
-              <div class="table-responsive" style="margin: auto;">
+            <div v-if="typeContacts === 'YSC'" class="container-xl">
+              <div class="table-responsive">
                 <div class="table-wrapper">
                   <div class="table-title">
                     <div class="row">
-                      <div class="col-sm-7">
-                        <b style="font-size:24px; float:left;">YSC Contacts</b>
-                        <a @click="handleModalCreate()" class="btn btn-success" data-toggle="modal" style="float: left;"><i class="material-icons">&#xE147;</i> <span>Thêm liên lạc</span></a>
-                        <a v-show="checkedContacts.length != 0" @click="deleteMultipleContacts" class="btn btn-danger" data-toggle="modal" style="float: left;">
+                      <div class="col-sm-7 left">
+                        <b>YSC Contacts</b>
+                        <a @click="handleModalCreate()" class="btn btn-success" data-toggle="modal" ><i class="material-icons">&#xE147;</i> <span>Thêm liên lạc</span></a>
+                        <a v-show="checkedContacts.length != 0" @click="deleteMultipleContacts" class="btn btn-danger" data-toggle="modal">
                           <i class="material-icons">&#xE15C;</i>
                           <span>Xóa liên lạc</span>
                         </a>                                
@@ -44,7 +44,7 @@
                       </div>
                     </div>
                   </div>
-                  <div style="text-align: center; margin: 14px 0 12px;">
+                  <div class="syncdata">
                     <span v-if="syncContacts.data.syncAt">
                       <b>Đồng bộ lần cuối vào: {{ syncContacts.data.syncAt.toLocaleString() }}</b>
                     </span>
@@ -61,6 +61,8 @@
                               <input type="checkbox" id="selectAll" class="contacts-checkbox" ref="selectAll" @click="selectAll()" v-model="allSelected">
                               <label for="selectAll"></label>
                             </span>
+                          </th>
+                          <th class="icon">
                           </th>
                           <th>
                             Tên liên lạc
@@ -88,6 +90,9 @@
                               <label for="checkbox1"></label>
                             </span>
                           </td>
+                          <td class="icon">
+                            <i class="fas fa-users"></i>
+                          </td>
                           <td @click="showContact(index)">
                             <div 
                               class="dropdown-toggle" 
@@ -95,20 +100,20 @@
                             >
                               {{ contact.phoneName }}
                             </div>
-                            <div v-show="showContacts[index]" class="phone-numbers"> 
-                              <div @click.stop>Thông tin liên hệ</div>
-                              <ul>
-                                <li 
-                                  v-for="(phoneNumber, index) in contact.phoneNumbers"
-                                  :key="index" 
-                                  @click.stop
-                                >
-                                  <a class="phone-number__item" :href="`tel:${phoneNumber}`">
-                                    {{ phoneNumber }}
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
+                                <div v-show="showContacts[index]" class="phone-numbers"> 
+                                  <div @click.stop>Thông tin liên hệ</div>
+                                  <ul>
+                                    <li 
+                                      v-for="(phoneNumber, index) in contact.phoneNumbers"
+                                      :key="index" 
+                                      @click.stop
+                                    >
+                                      <a class="phone-number__item" :href="`tel:${phoneNumber}`">
+                                        {{ phoneNumber }}
+                                      </a>
+                                    </li>
+                                  </ul>
+                                </div>
                           </td>
                           <td>
                             <a class="edit"  data-toggle="modal"><i @click="handleModalEdit(contact)" class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
@@ -133,17 +138,17 @@
                       </div>
                       <div class="modal-body">          
                         <div class="form-group">
-                          <label>Tên</label>
-                          <input type="text" class="form-control" v-model="newContact.phoneName" required>
+                          <label>Tên</label><transition name="fade"> <span class="nameExist" v-if="nameExist"> Tên liên hệ này đã tồn tại</span></transition> 
+                          <input @click="nameExist = false" type="text" class="form-control" v-model="newContact.phoneName" required> 
                         </div>
                         <div class="form-group">
-                          <label style="padding-right: 7px;">Số điện thoại</label> 
+                          <label class="Phone">Số điện thoại</label> 
                           <i @click="addPhoneNumber++" class="fas fa-plus-circle"></i>
-                          <i v-if="addPhoneNumber > 0" @click="addPhoneNumber--; newContact.phoneNumbers.splice(0, 1);" class="fas fa-minus-circle" style="float: right; margin-top: 36px;"></i>
+                          <i v-if="addPhoneNumber > 0" @click="addPhoneNumber--; newContact.phoneNumbers.splice(0, 1);" class="fas fa-minus-circle addPhone"></i>
                           <input type="text" name="phoneName" class="form-control" v-model="newContact.phoneNumbers[0]" required>
                         </div>
                         <div v-for="index in addPhoneNumber" :key="index" class="form-group">
-                          <i @click="addPhoneNumber--; newContact.phoneNumbers.splice(index, 1);" class="fas fa-minus-circle" style="float: right; margin-top: 9px;"></i>
+                          <i @click="addPhoneNumber--; newContact.phoneNumbers.splice(index, 1);" class="fas fa-minus-circle"></i>
                           <input type="text" class="form-control" v-model="newContact.phoneNumbers[index]" required>
                         </div>            
                       </div>
@@ -171,15 +176,15 @@
                       </div>
                       <div class="modal-body">          
                         <div class="form-group">
-                          <label>Tên</label>
-                          <input type="text" class="form-control" required v-model="oldContact.newPhoneName">
+                          <label>Tên</label> <transition name="fade"> <span class="nameExist" v-if="nameExist"> Tên liên hệ này đã tồn tại</span></transition>
+                          <input @click="nameExist = false" type="text" class="form-control" required v-model="oldContact.newPhoneName">
                         </div>
                         <div>
-                          <label style="padding-right: 7px;">Số điện thoại</label> 
+                          <label class="Phone">Số điện thoại</label> 
                           <i @click="addPhoneNumberEdit++" class="fas fa-plus-circle"></i>
                         </div>
                         <div v-for="index in addPhoneNumberEdit" :key="index" class="form-group">
-                          <i v-if="index != 1 || addPhoneNumberEdit > 1" @click="addPhoneNumberEdit--; oldContact.phoneNumbers.splice(index-1, 1);" class="fas fa-minus-circle" style="float: right; margin-top: 9px;"></i>
+                          <i v-if="index != 1 || addPhoneNumberEdit > 1" @click="addPhoneNumberEdit--; oldContact.phoneNumbers.splice(index-1, 1);" class="fas fa-minus-circle"></i>
                           <input type="text" class="form-control" v-model="oldContact.phoneNumbers[index-1]" required>
                         </div>            
                       </div>
@@ -194,13 +199,13 @@
             </div>
 
             <!-- Google contacts -->
-            <div v-if="typeContacts === 'google'" class="container-xl" style="padding-top: 25px;">
-              <div class="table-responsive" style="margin: auto;">
+            <div v-if="typeContacts === 'google'" class="container-xl">
+              <div class="table-responsive">
                 <div class="table-wrapper">
                   <div class="table-title" style="background-color: #f3cd2ce6;">
                     <div class="row">
-                      <div class="col-sm-7">
-                        <b style="font-size:24px; float:left;">Google Contacts</b>
+                      <div class="col-sm-7 left">
+                        <b>Google Contacts</b>
                       </div>
                       <div class="col-sm-5">            
                         <a @click="syncReverseGoogle" class="btn btn-info" data-toggle="modal"><i class="fas fa-sync"></i> <span>Đồng bộ ngược</span></a>
@@ -212,7 +217,9 @@
                     <table class="table table-striped table-hover">
                       <thead class="listcontact">
                         <tr>
-                          <th>
+                          <th class="iconService">
+                          </th>
+                          <th class="nameCT">
                             Tên liên lạc
                             <span v-if="!googleContacts.loading && googleContacts.linked" class="count-contacts">
                               ({{ googleContacts.data.length }})
@@ -230,27 +237,30 @@
                       </div>
                       <tbody v-if="!googleContacts.loading && googleContacts.linked">
                         <tr v-for="(contact, index) in googleContacts.data" :key="index" class="dropdown" >
-                          <td @click="showContact(index)">
+                          <td class="iconService">
+                            <i class="fab fa-google"></i>
+                          </td>
+                          <td @click="showContact(index)" class="nameCT">
                             <div 
                               class="dropdown-toggle" 
                               :class="[showContacts[index] ? 'reverse' : '' ]"
                             >
                               {{ contact.phoneName }}
                             </div>
-                            <div v-show="showContacts[index]" class="phone-numbers"> 
-                              <div @click.stop>Thông tin liên hệ</div>
-                              <ul>
-                                <li 
-                                  v-for="(phoneNumber, index) in contact.phoneNumbers"
-                                  :key="index"
-                                  @click.stop
-                                >
-                                  <a class="phone-number__item" :href="`tel:${phoneNumber}`">
-                                    {{ phoneNumber }}
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
+                              <div v-show="showContacts[index]" class="phone-numbers"> 
+                                <div @click.stop>Thông tin liên hệ</div>
+                                <ul>
+                                  <li 
+                                    v-for="(phoneNumber, index) in contact.phoneNumbers"
+                                    :key="index"
+                                    @click.stop
+                                  >
+                                    <a class="phone-number__item" :href="`tel:${phoneNumber}`">
+                                      {{ phoneNumber }}
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
                           </td>
                         </tr>
                       </tbody>
@@ -262,13 +272,13 @@
             </div>
 
             <!-- Outlook Contacts -->
-            <div v-if="typeContacts === 'outlook'" class="container-xl" style="padding-top: 25px;">
-              <div class="table-responsive" style="margin: auto;">
+            <div v-if="typeContacts === 'outlook'" class="container-xl">
+              <div class="table-responsive">
                 <div class="table-wrapper">
                   <div class="table-title" style="background-color: #4285f4">
                     <div class="row">
                       <div class="col-sm-7">
-                        <b style="font-size:24px; float:left;">Outlook Contacts</b>                      
+                        <b class="outlookct">Outlook Contacts</b>                      
                       </div>
                       <div class="col-sm-5">            
                         <a @click="syncReverseOutlook" class="btn btn-info" data-toggle="modal"><i class="fas fa-sync"></i> <span>Đồng bộ ngược</span></a>
@@ -280,7 +290,9 @@
                     <table class="table table-striped table-hover">
                       <thead class="listcontact">
                         <tr>
-                          <th>
+                          <th class="iconService">
+                          </th>
+                          <th class="nameCT">
                             Tên liên lạc
                             <span v-if="!outlookContacts.loading && outlookContacts.linked" class="count-contacts">
                               ({{ outlookContacts.data.length }})
@@ -298,27 +310,30 @@
                       </div>
                       <tbody v-if="!outlookContacts.loading && outlookContacts.linked">
                         <tr v-for="(contact, index) in outlookContacts.data" :key="index" class="dropdown" >
-                          <td @click="showContact(index)">
+                          <td class="iconService">
+                            <i class="fab fa-microsoft"></i>
+                          </td>
+                          <td @click="showContact(index)" class="nameCT">
                             <div 
                               class="dropdown-toggle" 
                               :class="[showContacts[index] ? 'reverse' : '' ]"
                             >
                               {{ contact.phoneName }}
                             </div>
-                            <div v-show="showContacts[index]" class="phone-numbers"> 
-                              <div @click.stop>Thông tin liên hệ</div>
-                              <ul>
-                                <li 
-                                  v-for="(phoneNumber, index) in contact.phoneNumbers"
-                                  :key="index"
-                                  @click.stop
-                                >
-                                  <a class="phone-number__item" :href="`tel:${phoneNumber}`">
-                                    {{ phoneNumber }}
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
+                              <div v-show="showContacts[index]" class="phone-numbers"> 
+                                <div @click.stop>Thông tin liên hệ</div>
+                                <ul>
+                                  <li 
+                                    v-for="(phoneNumber, index) in contact.phoneNumbers"
+                                    :key="index"
+                                    @click.stop
+                                  >
+                                    <a class="phone-number__item" :href="`tel:${phoneNumber}`">
+                                      {{ phoneNumber }}
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
                           </td>
                         </tr>
                       </tbody>
@@ -368,7 +383,8 @@ export default {
       checkedContacts: [],
       allSelected: false,
       showContacts: [],
-      typeContacts: 'YSC',  
+      typeContacts: 'YSC',
+      nameExist: false,  
       syncContacts: {
         loading: false,
         data: {}
@@ -520,6 +536,7 @@ export default {
 
     //tao 1 lien he moi
     handleModalCreate(){
+      this.nameExist = false;
       this.showModalCreate = true;
       this.newContact = {
         phoneName: '',
@@ -543,20 +560,22 @@ export default {
           this.refreshYSCContacts();
         }
         else {
+          this.nameExist = true;
           console.log(response.data);
         }
       } catch(e) {
         // statements
         console.log(e);
       }
-      this.newContact = {
-        phoneName: '',
-        phoneNumbers: []
-      }
+      //this.newContact = {
+        //phoneName: '',
+        //phoneNumbers: []
+      //}
     },
 
     //show modal update va update contact
     handleModalEdit(contact) {
+      this.nameExist = false;
       this.showModalEdit = true;
       this.oldContact.oldPhoneName = contact.phoneName;
       this.oldContact.newPhoneName = contact.phoneName;
@@ -580,6 +599,8 @@ export default {
           this.refreshYSCContacts();
         }
         else {
+          this.nameExist = true;
+          //this.oldContact.newPhoneName = this.oldContact.oldPhoneName;
           console.log(response.data);
         }
       } catch(e) {
