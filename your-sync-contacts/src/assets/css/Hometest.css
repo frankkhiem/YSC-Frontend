@@ -429,6 +429,9 @@ i.fas,
 .not-linked {
     text-align: center;
     margin-top: 80px;
+    position: absolute;
+    left: 0;
+    right: 0;
 }
 
 .not-linked__message {
@@ -451,11 +454,11 @@ i.fas,
 
 /* transition cho list so dien thoai */
 .fade-enter-active {
-    transition: opacity 1s;
+    transition: opacity .2s;
 }
 
 .fade-leave-active {
-    transition: opacity .4s;
+    transition: opacity .2s;
 }
 
 .fade-enter,
@@ -466,7 +469,7 @@ i.fas,
 /**/
 .nameExist {
     color: red;
-    margin-left: 15px;
+    margin-left: 95px;
     font-weight: bold;
 }
 
@@ -525,15 +528,34 @@ i.fas,
     width: 65px;
 }
 
-.iconService {
-    padding-left: 45px !important;
-    width: 15%;
-}
-
 .gg {
     background-color: #cf6a68;
 }
 
 .ol {
     background-color: #65c556
+}
+
+table.table tr th.service-icon {
+    padding-left: 50px;
+    width: 15%;
+}
+
+table.table tr td.service-icon {
+    padding-left: 57px;
+}
+
+table.table tr td.service-icon .show-icon {
+    margin-left: 4px;
+}
+
+.google-service {
+    font-size: 25px !important;
+    color: #b91a17;
+    font-weight: bold;
+}
+
+.outlook-service {
+    font-size: 25px !important;
+    color: #139bb1;
 }
