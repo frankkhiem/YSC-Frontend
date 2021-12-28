@@ -1,11 +1,12 @@
 <template>
   <div class="main">
-    <h1>Đây là trang 404 Not Found</h1>
+    <!-- <h1>Đây là trang 404 Not Found</h1>
     <button @click="getAuthOutlook">Outlook</button>
     <h4 v-if="outlook.linking">Đang liên kết</h4>
     <br><br>
     <button @click="getAuthZalo">Zalo</button>
-    <h4 v-if="zalo.linking">Đang liên kết</h4>
+    <h4 v-if="zalo.linking">Đang liên kết</h4> -->
+    <img class="error" src="@/assets/img/error 404.gif">
   </div>
 </template>
 <script>
@@ -72,8 +73,18 @@ export default {
 }
 </script>
 <style scoped>
+.main {
+  position: relative;
+}
+
 .main h1 {
   font-size: 3rem;
   text-align: center;
+}
+
+.error {
+  margin: 0 auto;
+  display: block;
+  height: 100vh;
 }
 </style>

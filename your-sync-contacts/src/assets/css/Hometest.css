@@ -543,6 +543,7 @@ table.table tr th.service-icon {
 
 table.table tr td.service-icon {
     padding-left: 57px;
+    color: #4a403d;
 }
 
 table.table tr td.service-icon .show-icon {
