@@ -28,24 +28,25 @@ const mutations = {
 };
 
 const actions = {
-  fetchUser: ({ commit }) => {
-    if( localStorage.getItem('accessToken') === null ) {
+  fetchUser: async ({
+    commit
+  }) => {
+    if (localStorage.getItem('accessToken') === null) {
       commit('logoutUser');
       return;
     }
 
-    axios.get('http://localhost:11223/profile', 
-    {
-      params: {
-        accessToken: localStorage.getItem('accessToken')
-      }
-    })
-    .then( response => {
-      commit('updateUser', response.data);
-    })
-    .catch( () => {
-      commit('logoutUser');
-    });
+    axios.get('http://localhost:11223/profile', {
+        params: {
+          accessToken: localStorage.getItem('accessToken')
+        }
+      })
+      .then(response => {
+        commit('updateUser', response.data);
+      })
+      .catch(() => {
+        commit('logoutUser');
+      });
     return;
   }
 };

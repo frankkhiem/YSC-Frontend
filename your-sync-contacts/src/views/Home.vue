@@ -1,111 +1,416 @@
 <template>
-  <div class="home">
-    <div class="list-contacts">
-      <h3 class="type">Danh bạ đã được đồng bộ</h3>
-      
-      <div class="contacts-btn">
-        <span class="sync-contacts-btn" @click="sync">Đồng bộ</span>
+<div>
+<!-- tml khanh -->
+  <div class="contacts container-fluid">
+    <div class="row">
+      <!-- phần nav 3 loại danh bạ -->
+      <div class="col-3">
+        <div class="nav flex-column nav-pills menu p-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <a @click="typeContacts = 'YSC'" class="nav-link py-3" :class="[typeContacts === 'YSC' ? 'active' : '']" id="v-pills-ysc-contact-tab btn" data-toggle="pill"  role="tab" aria-controls="v-pills-ysc-contact" aria-selected="true"><i class="fas fa-address-book"></i>&nbsp;&nbsp;&nbsp;YSC CONTACTS</a>
+          <a @click="typeContacts = 'google'" class="nav-link py-3" :class="[typeContacts === 'google' ? 'active' : '']" id="v-pills-gg-contact-tab btn" data-toggle="pill" role="tab" aria-controls="v-pills-gg-contact" aria-selected="false"><i class="fab fa-google"></i>&nbsp;&nbsp;GOOGLE CONTACTS</a>
+          <a @click="typeContacts = 'outlook'" class="nav-link py-3" :class="[typeContacts === 'outlook' ? 'active' : '']" id="v-pills-outlook-contact-tab btn" data-toggle="pill" role="tab" aria-controls="v-pills-outlook-contact" aria-selected="false"><i class="fab fa-microsoft"></i>&nbsp;&nbsp;OUTLOOK CONTACTS</a>
+        </div>
       </div>
 
-      <div class="contacts-content">
-        <div class="loading" v-if="syncContacts.loading">Loading.......</div>
+      <!-- phần bảng 3 loại danh bạ -->
+      <div class="col-5">
+        <div class="tab-content" id="v-pills-tabContent">
+          <div class="tab-pane fade show active" id="v-pills-ysc-contact" role="tabpanel" aria-labelledby="v-pills-ysc-contact-tab">
+          <!-- paste cái bảng ysc-contact vào đây.chỉnh sửa tý cho giốngcái bảng mẫu ysc-contact. paste xong nhớ bảng ví dụ xóa đi -->
 
-        <div v-if="!syncContacts.loading">
-          <div style="text-align: center;">
-            <span v-if="syncContacts.data.syncAt">
-              Đồng bộ lần cuối vào: {{ syncContacts.data.syncAt.toLocaleString() }}
-            </span>
-            <span v-else>
-              Chưa từng được đồng bộ!
-            </span>
-          </div>
+            <!-- syncontact-->
+            <div v-if="typeContacts === 'YSC'" class="container-xl">
+              <div class="table-responsive">
+                <div class="table-wrapper">
+                  <div class="table-title">
+                    <div class="row">
+                      <div class="col-sm-7 left">
+                        <b>YSC Contacts</b>
+                        <a @click="handleModalCreate()" class="btn btn-success" data-toggle="modal" ><i class="material-icons">&#xE147;</i> <span>Thêm liên lạc</span></a>
+                        <a v-show="checkedContacts.length != 0" @click="deleteMultipleContacts" class="btn btn-danger" data-toggle="modal">
+                          <i class="material-icons">&#xE15C;</i>
+                          <span>Xóa liên lạc</span>
+                        </a>                                
+                      </div>
+                      <div class="col-sm-5">     
+                        <a @click="sync" class="btn btn-info" data-toggle="modal">
+                          <i class="fas fa-sync"></i> 
+                          <span>Đồng bộ</span>
+                        </a>
+                        <a @click="refreshYSCContacts()" class="btn btn-primary" data-toggle="modal">
+                          <i class="fas fa-redo-alt"></i> 
+                          <span>Làm mới</span>
+                        </a>                             
+                      </div>
+                    </div>
+                  </div>
+                  <div class="syncdata">
+                    <span v-if="syncContacts.data.syncAt">
+                      <b>Đồng bộ lần cuối vào: {{ syncContacts.data.syncAt.toLocaleString() }}</b>
+                    </span>
+                    <span v-else>
+                      <b>Chưa từng được đồng bộ!</b>
+                    </span>
+                  </div>
+                  <div class="table-scroll"> 
+                    <table class="table table-striped table-hover">
+                      <thead class="listcontact">
+                        <tr>
+                          <th>
+                            <span class="custom-checkbox">
+                              <input type="checkbox" id="selectAll" class="contacts-checkbox" ref="selectAll" @click="selectAll()" v-model="allSelected">
+                              <label for="selectAll"></label>
+                            </span>
+                          </th>
+                          <th>
+                            Tên liên lạc
+                            <span v-if="!syncContacts.loading" class="count-contacts">
+                              <span v-if="checkedContacts.length > 0">
+                                ({{checkedContacts.length}}/{{syncContacts.data.contacts.length}})
+                              </span>
+                              <span v-else>
+                                ({{ syncContacts.data.contacts.length }})
+                              </span>
+                            </span>
+                          </th>
+                          <th>Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tbody v-if="!syncContacts.loading">
+                        <tr 
+                          v-for="(contact, index) in syncContacts.data.contacts" 
+                          :key="index" 
+                          class="dropdown"
+                        >
+                          <td>
+                            <span class="custom-checkbox">
+                              <input type="checkbox" id="checkbox1" class="contacts-checkbox" :value="contact.phoneName" v-model="checkedContacts" checked>
+                              <label for="checkbox1"></label>
+                            </span>
+                          </td>
+                          <td @click="showContact(index)">
+                            <div 
+                              class="dropdown-toggle" 
+                              :class="[showContacts[index] ? 'reverse' : '' ]"
+                            >
+                              {{ contact.phoneName }}
+                            </div>
+                            <div v-show="showContacts[index]" class="phone-numbers"> 
+                              <div @click.stop>Thông tin liên hệ</div>
+                              <ul>
+                                <li 
+                                  v-for="(phoneNumber, index) in contact.phoneNumbers"
+                                  :key="index" 
+                                  @click.stop
+                                >
+                                  <a class="phone-number__item" :href="`tel:${phoneNumber}`">
+                                    {{ phoneNumber }}
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                          <td>
+                            <a class="edit"  data-toggle="modal"><i @click="handleModalEdit(contact)" class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            <a class="delete" data-toggle="modal"><i @click="deleteContact(contact.phoneName)" class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                          </td>
+                        </tr>
+                      </tbody>
+                      <img v-else class="loading-contacts" src="@/assets/img/Spin-2s-204px.gif">
+                    </table>
+                  </div>
+                </div>
+              </div>
 
-          <div class="contact-item" v-for="(contact, index) in syncContacts.data.contacts" :key="index">
-            <h3>{{ contact.phoneName }}</h3>
-            <div v-for="(phoneNumber, index) in contact.phoneNumbers" :key="index">
-              {{ phoneNumber }}
+              <!-- Modal create contact -->
+              <div id="addEmployeeModal" v-if="showModalCreate">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <form @submit="createContact">
+                      <div class="modal-header">            
+                        <h4 class="modal-title">Tạo liên hệ</h4>
+                        <button type="button" @click="showModalCreate = false" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      </div>
+                      <div class="modal-body">          
+                        <div class="form-group">
+                          <label>Tên</label><transition name="fade"> <span class="nameExist" v-if="nameExist">Tên liên hệ này đã tồn tại!</span></transition> 
+                          <input @click="nameExist = false" type="text" class="form-control" v-model="newContact.phoneName" required> 
+                        </div>
+                        <div class="form-group">
+                          <label class="Phone">Số điện thoại</label> 
+                          <i @click="addPhoneNumber++" class="fas fa-plus-circle"></i>
+                          <i v-if="addPhoneNumber > 0" @click="addPhoneNumber--; newContact.phoneNumbers.splice(0, 1);" class="fas fa-minus-circle addPhone"></i>
+                          <input type="text" name="phoneName" class="form-control" v-model="newContact.phoneNumbers[0]" required>
+                        </div>
+                        <div v-for="index in addPhoneNumber" :key="index" class="form-group">
+                          <i @click="addPhoneNumber--; newContact.phoneNumbers.splice(index, 1);" class="fas fa-minus-circle"></i>
+                          <input type="text" class="form-control" v-model="newContact.phoneNumbers[index]" required>
+                        </div>            
+                      </div>
+                      <div class="modal-footer">
+                        <input 
+                          @click="showModalCreate = false"
+                          type="button" 
+                          class="btn btn-default" 
+                          data-dismiss="modal" value="Cancel"
+                        >
+                        <input type="submit" class="btn btn-info" value="Save">
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <!-- Edit Modal HTML -->
+              <div id="editEmployeeModal" v-if="showModalEdit">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <form @submit="updateContact">
+                      <div class="modal-header">            
+                        <h4 class="modal-title">Chỉnh sửa liên hệ</h4>
+                        <button type="button" @click="showModalEdit=false" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      </div>
+                      <div class="modal-body">          
+                        <div class="form-group">
+                          <label>Tên</label> <transition name="fade"> <span class="nameExist" v-if="nameExist">Tên liên hệ này đã tồn tại!</span></transition>
+                          <input @click="nameExist = false" type="text" class="form-control" required v-model="oldContact.newPhoneName">
+                        </div>
+                        <div>
+                          <label class="Phone">Số điện thoại</label> 
+                          <i @click="addPhoneNumberEdit++" class="fas fa-plus-circle"></i>
+                        </div>
+                        <div v-for="index in addPhoneNumberEdit" :key="index" class="form-group">
+                          <i v-if="index != 1 || addPhoneNumberEdit > 1" @click="addPhoneNumberEdit--; oldContact.phoneNumbers.splice(index-1, 1);" class="fas fa-minus-circle"></i>
+                          <input type="text" class="form-control" v-model="oldContact.phoneNumbers[index-1]" required>
+                        </div>            
+                      </div>
+                      <div class="modal-footer">
+                        <input @click="showModalEdit=false;" type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                        <input type="submit" class="btn btn-info" value="Save">
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>         
             </div>
-            <br>
-          </div>
-        </div>  
-      </div>
 
+            <!-- Google contacts -->
+            <div v-if="typeContacts === 'google'" class="container-xl">
+              <div class="table-responsive">
+                <div class="table-wrapper">
+                  <div class="table-title gg">
+                    <div class="row">
+                      <div class="col-sm-7 left">
+                        <b>Google&nbsp;&nbsp;Contacts</b>
+                      </div>
+                      <div class="col-sm-5">            
+                        <a @click="syncReverseGoogle" class="btn btn-info" data-toggle="modal"><i class="fas fa-sync"></i> <span>Đồng bộ ngược</span></a>
+                        <a @click="refreshGoogleContacts()" class="btn btn-primary" data-toggle="modal"><i class="fas fa-redo-alt"></i> <span>Làm mới</span></a>                          
+                      </div>
+                    </div>
+                  </div>
+                  <div class="table-scroll"> 
+                    <table class="table table-striped table-hover">
+                      <thead class="listcontact">
+                        <tr>
+                          <th class="service-icon">
+                            <i class="fab fa-google google-service"></i>
+                          </th>
+                          <th class="nameCT">
+                            Tên liên lạc
+                            <span v-if="!googleContacts.loading && googleContacts.linked" class="count-contacts">
+                              ({{ googleContacts.data.length }})
+                            </span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <div v-if="!googleContacts.loading && !googleContacts.linked" class="not-linked">
+                        <div class="not-linked__message">
+                          Bạn chưa liên kết với tài khoản Google của mình!
+                        </div>
+                        <router-link :to="{name: 'Profile'}" class="not-linked__link">
+                          &raquo;&nbsp;đi tới Cài đặt
+                        </router-link>
+                      </div>
+                      <tbody v-if="!googleContacts.loading && googleContacts.linked">
+                        <tr v-for="(contact, index) in googleContacts.data" :key="index" class="dropdown" >
+                          <td class="service-icon">
+                            <i v-if="!showContacts[index]" class="far fa-user-circle"></i>
+                            <i v-else class="fas fa-phone-volume show-icon"></i>
+                          </td>
+                          <td @click="showContact(index)" class="nameCT">
+                            <div 
+                              class="dropdown-toggle" 
+                              :class="[showContacts[index] ? 'reverse' : '' ]"
+                            >
+                              {{ contact.phoneName }}
+                            </div>
+                            <div v-show="showContacts[index]" class="phone-numbers"> 
+                              <div @click.stop>Thông tin liên hệ</div>
+                              <ul>
+                                <li 
+                                  v-for="(phoneNumber, index) in contact.phoneNumbers"
+                                  :key="index"
+                                  @click.stop
+                                >
+                                  <a class="phone-number__item" :href="`tel:${phoneNumber}`">
+                                    {{ phoneNumber }}
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                      <img v-if="googleContacts.loading" class="loading-contacts" src="@/assets/img/Spin-2s-204px.gif">
+                    </table>
+                  </div>
+                </div>
+              </div>      
+            </div>
+
+            <!-- Outlook Contacts -->
+            <div v-if="typeContacts === 'outlook'" class="container-xl">
+              <div class="table-responsive">
+                <div class="table-wrapper">
+                  <div class="table-title ol">
+                    <div class="row">
+                      <div class="col-sm-7">
+                        <b class="outlookct">Outlook Contacts</b>                      
+                      </div>
+                      <div class="col-sm-5">            
+                        <a @click="syncReverseOutlook" class="btn btn-info" data-toggle="modal"><i class="fas fa-sync"></i> <span>Đồng bộ ngược</span></a>
+                        <a @click="refreshOutlookContacts()" class="btn btn-primary" data-toggle="modal"><i class="fas fa-redo-alt"></i> <span>Làm mới</span></a>                         
+                      </div>
+                    </div>
+                  </div>
+                  <div class="table-scroll"> 
+                    <table class="table table-striped table-hover">
+                      <thead class="listcontact">
+                        <tr>
+                          <th class="service-icon">
+                            <i class="fab fa-windows outlook-service"></i>
+                          </th>
+                          <th class="nameCT">
+                            Tên liên lạc
+                            <span v-if="!outlookContacts.loading && outlookContacts.linked" class="count-contacts">
+                              ({{ outlookContacts.data.length }})
+                            </span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <div v-if="!outlookContacts.loading && !outlookContacts.linked" class="not-linked">
+                        <div class="not-linked__message">
+                          Bạn chưa liên kết với tài khoản Outlook của mình!
+                        </div>
+                        <router-link :to="{name: 'Profile'}" class="not-linked__link">
+                          &raquo;&nbsp;đi tới Cài đặt
+                        </router-link>
+                      </div>
+                      <tbody v-if="!outlookContacts.loading && outlookContacts.linked">
+                        <tr v-for="(contact, index) in outlookContacts.data" :key="index" class="dropdown" >
+                          <td class="service-icon">
+                            <i v-if="!showContacts[index]" class="far fa-user-circle"></i>
+                            <i v-else class="fas fa-phone-volume show-icon"></i>
+                          </td>
+                          <td @click="showContact(index)" class="nameCT">
+                            <div 
+                              class="dropdown-toggle" 
+                              :class="[showContacts[index] ? 'reverse' : '' ]"
+                            >
+                              {{ contact.phoneName }}
+                            </div>
+                            <div v-show="showContacts[index]" class="phone-numbers"> 
+                              <div @click.stop>Thông tin liên hệ</div>
+                              <ul>
+                                <li 
+                                  v-for="(phoneNumber, index) in contact.phoneNumbers"
+                                  :key="index"
+                                  @click.stop
+                                >
+                                  <a class="phone-number__item" :href="`tel:${phoneNumber}`">
+                                    {{ phoneNumber }}
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                      <img v-if="outlookContacts.loading" class="loading-contacts" src="@/assets/img/Spin-2s-204px.gif">
+                    </table>
+                  </div>
+                </div>
+              </div>      
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <!-- hết phần bảng 3 loại danh bạ -->
     </div>
-    <div class="list-contacts">
-      <h3 class="type">
-        Danh bạ Google 
-        <span v-if="!user.linkedGoogle">(chưa liên kết)</span>
-      </h3>
-      
-      <div class="contacts-btn">
-        <span class="load-contacts-btn" @click="loadContacts('google')">Làm mới</span>
+  </div>
+  <!-- tml khanh -->
+  <!-- popup custom confirm -->
+  <div v-show="showConfirmPopup" class="confirm">
+    <div class="confirm-popup">
+      <div class="confirm-message">
+        {{ confirmMessage }}
       </div>
-
-      <div class="contacts-content">
-        <div class="loading" v-if="googleContacts.loading">Loading.......</div>
-        <div v-if="!googleContacts.loading">
-          <div class="contact-item" v-for="(contact, index) in googleContacts.data" :key="index">
-            <h3>{{ contact.phoneName }}</h3>
-            <div v-for="(phoneNumber, index) in contact.phoneNumbers" :key="index">
-              {{ phoneNumber }}
-            </div>
-            <br>
-          </div>
-        </div>  
-      </div>
-
-    </div>
-    <div class="list-contacts">
-      <h3 class="type">
-        Danh bạ Outlook 
-        <span v-if="!user.linkedOutlook">(chưa liên kết)</span>
-      </h3>
-      
-      <div class="contacts-btn">
-        <span class="load-contacts-btn" @click="loadContacts('outlook')">Làm mới</span>
-      </div>
-
-      <div class="contacts-content">
-        <div class="loading" v-if="outlookContacts.loading">Loading.......</div>
-        <div v-if="!outlookContacts.loading">
-          <div class="contact-item" v-for="(contact, index) in outlookContacts.data" :key="index">
-            <h3>{{ contact.phoneName }}</h3>
-            <div v-for="(phoneNumber, index) in contact.phoneNumbers" :key="index">
-              {{ phoneNumber }}
-            </div>
-            <br>
-          </div>
-        </div>  
+      <div class="confirm-btns">
+        <div class="cancel-btn">
+          Hủy
+        </div>
+        <div class="agree-btn">
+          Xóa
+        </div>
       </div>
     </div>
   </div>
+</div>  
 </template>
-
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
 import { mapGetters } from 'vuex';
 import axios from 'axios';
 
 export default {
-  // name: 'Home',
-  // components: {
-  //   HelloWorld
-  // }
   data() {
     return {
+      addPhoneNumber: 0, 
+      addPhoneNumberEdit: 0,
+      showModalEdit: false,
+      showModalCreate: false,
+      checkedContacts: [],
+      allSelected: false,
+      showContacts: [],
+      typeContacts: 'YSC',
+      nameExist: false,  
       syncContacts: {
-        loading: true,
+        loading: false,
         data: {}
       },
       googleContacts: {
-        loading: true,
+        loading: false,
+        linked: false,
         data: []
       },
       outlookContacts: {
-        loading: true,
+        loading: false,
+        linked: false,
         data: []
-      }      
+      },
+      // Crud contact
+      newContact: {
+        phoneName: '',
+        phoneNumbers: []
+      },
+      oldContact: {
+        oldPhoneName: '',
+        newPhoneName: '',
+        phoneNumbers: []
+      },
+      // custom confirm
+      showConfirmPopup: false,
+      confirmMessage: '',
     }
   }, 
   
@@ -117,58 +422,83 @@ export default {
   },
 
   methods: {
+    showContact(index) {
+      this.$set(this.showContacts, index, !this.showContacts[index]);
+    },
+
     async sync() {
       console.log('Dong bo danh ba nguoi dung');
       this.syncContacts.loading = true;
 
       try {
-        let response = await axios.get(this.$backendBase + '/sync-contacts', {
+        await axios.get(this.$backendHost + '/sync-contacts', {
           params: {
             accessToken: localStorage.getItem('accessToken')
           }
         });
-
-        this.syncContacts.data.syncAt = new Date(response.data.syncAt);
-        this.syncContacts.data.contacts = response.data.contacts;
       } catch(error) {
         console.log(error.response.data);
       }
 
-      this.syncContacts.loading = false;
+      this.refreshYSCContacts();
     },
 
     async loadContacts(type) {
       if( type === 'google' ) {
-        console.log('Load danh ba Google');
-        this.googleContacts.loading = true;
+        // console.log('Load danh ba Google');
 
         try {
-          await axios.post(this.$backendBase + '/google/load-contacts', {
+          await axios.post(this.$backendHost + '/google/load-contacts', {
             accessToken: localStorage.getItem('accessToken')
           });
+          this.googleContacts.linked = true;
           let response = await this.fetchContactFromApi('/google/contacts');
           this.googleContacts.data = response.data;
+          for( let i = 0; i < response.data.length; i++ ) {
+            this.showContacts[i] = false;
+          }
         } catch(error) {
           console.log(error.response.data);
+          this.googleContacts.linked = false;
         }
-
-        this.googleContacts.loading = false;
       }
       else if(type === 'outlook') {
-        console.log('Load danh ba Outlook');
-        this.outlookContacts.loading = true;
+        // console.log('Load danh ba Outlook');
 
         try {
-          await axios.post(this.$backendBase + '/outlook/load-contacts', {
+          await axios.post(this.$backendHost + '/outlook/load-contacts', {
             accessToken: localStorage.getItem('accessToken')
           });
+          this.outlookContacts.linked = true;
           let response = await this.fetchContactFromApi('/outlook/contacts');
           this.outlookContacts.data = response.data;
+          for( let i = 0; i < response.data.length; i++ ) {
+            this.showContacts[i] = false;
+          }
         } catch(error) {
           console.log(error.response.data);
+          this.outlookContacts.linked = false;
         }
-
-        this.outlookContacts.loading = false;
+      }
+      else if( type === 'YSC' ) {
+        // console.log('Load danh ba YSC');
+        
+        try {
+          let response = await this.fetchContactFromApi('/contacts');
+          if (response.data.syncAt === null) {
+            this.syncContacts.data.syncAt = null;
+          } 
+          else {
+            this.syncContacts.data.syncAt = new Date(response.data.syncAt);
+          }          
+          this.syncContacts.data.contacts = response.data.contacts;
+          for( let i = 0; i < response.data.contacts.length; i++ ) {
+            this.showContacts[i] = false;
+          }
+        } catch(e) {
+          // statements
+          console.log(e);
+        }
       }
       else {
         console.warn('Khong co loai nay');
@@ -176,129 +506,261 @@ export default {
     },
 
     fetchContactFromApi(path) {
-      let url = this.$backendBase + path;
+      let url = this.$backendHost + path;
       return axios.get(url,{
         params: {
             accessToken: localStorage.getItem('accessToken')
           }
       });
-    }
+    },
+
+    async refreshYSCContacts() {
+      this.checkedContacts = [];
+      this.syncContacts.loading = true;
+      await this.loadContacts('YSC');
+      this.syncContacts.loading = false;
+    },
+
+    async refreshGoogleContacts() {
+      this.googleContacts.loading = true;
+      await this.loadContacts('google');
+      this.googleContacts.loading = false;
+    },
+
+    async refreshOutlookContacts() {
+      this.outlookContacts.loading = true;
+      await this.loadContacts('outlook');
+      this.outlookContacts.loading = false;
+    },
+
+    //tao 1 lien he moi
+    handleModalCreate(){
+      this.nameExist = false;
+      this.showModalCreate = true;
+      this.newContact = {
+        phoneName: '',
+        phoneNumbers: []
+      };
+      this.addPhoneNumber = 0;
+    },
+    async createContact(event) {
+      event.preventDefault();
+      // console.log(this.newContact);
+      try {
+        let response =  await axios.post(this.$backendHost + '/contact', {
+          accessToken: localStorage.getItem('accessToken'),
+          phoneName: this.newContact.phoneName,
+          phoneNumbers: this.newContact.phoneNumbers
+        });
+
+        // console.log(response.data);
+        if( response.data.success ) {
+          this.showModalCreate = false;
+          this.refreshYSCContacts();
+        }
+        else {
+          this.nameExist = true;
+          console.log(response.data);
+        }
+      } catch(e) {
+        // statements
+        console.log(e);
+      }
+      //this.newContact = {
+        //phoneName: '',
+        //phoneNumbers: []
+      //}
+    },
+
+    //show modal update va update contact
+    handleModalEdit(contact) {
+      this.nameExist = false;
+      this.showModalEdit = true;
+      this.oldContact.oldPhoneName = contact.phoneName;
+      this.oldContact.newPhoneName = contact.phoneName;
+      this.oldContact.phoneNumbers = contact.phoneNumbers.slice();
+      this.addPhoneNumberEdit = contact.phoneNumbers.length;
+    },
+    async updateContact(event) {
+      event.preventDefault();
+      // console.log(this.oldContact);
+      try {
+        let response = await axios.put(this.$backendHost + '/contact', {
+          accessToken: localStorage.getItem('accessToken'),
+          oldPhoneName: this.oldContact.oldPhoneName,
+          newPhoneName: this.oldContact.newPhoneName,
+          phoneNumbers: this.oldContact.phoneNumbers
+        });
+
+        // console.log(response.data);
+        if( response.data.success ) {
+          this.showModalEdit = false;
+          this.refreshYSCContacts();
+        }
+        else {
+          this.nameExist = true;
+          //this.oldContact.newPhoneName = this.oldContact.oldPhoneName;
+          console.log(response.data);
+        }
+      } catch(e) {
+        // statements
+        console.log(e);
+      }
+    },
+
+    //xoa 1 lien he
+    deleteContact(phoneName){
+      var message = `Xóa '${phoneName}' khỏi danh bạ?`;
+      var deleteCallback = async () => {
+        try {
+          let response = await axios.delete(this.$backendHost + '/contact',{
+            params: {
+              accessToken: localStorage.getItem('accessToken'),
+              phoneName: phoneName
+            }
+          });
+
+          if( response.data.success ) {
+            this.refreshYSCContacts();
+          }
+        } catch(e) {
+          // statements
+          console.log(e);
+        }
+      };
+      this.customConfirm(message, deleteCallback);
+    },
+
+    // xoa nhieu lien he
+    async deleteMultipleContacts() {
+      var message = `Xóa ${this.checkedContacts.length} liên hệ khỏi danh bạ?`;
+      var deleteCallback = async () => {
+        try {
+          let response = await axios.post(this.$backendHost + '/contact/delete-multiple',{
+            accessToken: localStorage.getItem('accessToken'),
+            listPhoneNames: this.checkedContacts
+          });
+
+          if( response.data.success ) {
+            this.refreshYSCContacts();
+          }
+        } catch(e) {
+          // statements
+          console.log(e);
+        }
+        this.checkedContacts = [];
+      };
+      this.customConfirm(message, deleteCallback);
+    },
+
+    // đồng bộ ngược Google
+    async syncReverseGoogle() {
+      this.googleContacts.loading = true;
+      try {
+        let response = await axios.get(this.$backendHost + '/google/sync-reverse',{
+          params: {
+            accessToken: localStorage.getItem('accessToken')
+          }
+        });
+
+        if( response.data.success ) {
+          this.refreshGoogleContacts();
+        }
+      } catch(e) {
+        // statements
+        console.log(e);
+      }
+    },
+
+    // đồng bộ ngược Outlook
+    async syncReverseOutlook() {
+      this.outlookContacts.loading = true;
+      try {
+        let response = await axios.get(this.$backendHost + '/outlook/sync-reverse',{
+          params: {
+            accessToken: localStorage.getItem('accessToken')
+          }
+        });
+
+        if( response.data.success ) {
+          this.refreshOutlookContacts();
+        }
+      } catch(e) {
+        // statements
+        console.log(e);
+      }
+    },
+
+    // xử lý chọn tất cả liên hệ
+    selectAll(){
+      if(!this.allSelected){
+        this.checkedContacts = [];
+        for(let contact in this.syncContacts.data.contacts) {
+            this.checkedContacts.push(this.syncContacts.data.contacts[contact].phoneName);
+        }
+      }
+      else{
+        this.checkedContacts=[];
+      }
+    },// tick de chon tat ca cac lien he
+
+    customConfirm(message, callback){
+      this.confirmMessage = message;
+      this.showConfirmPopup = true;
+      document.querySelector('.confirm').onclick = () => {
+        this.showConfirmPopup = false;
+      };
+      document.querySelector('.confirm-popup').onclick = (event) => {
+        event.stopPropagation();
+      }
+      document.querySelector('.confirm-btns .cancel-btn').onclick = () => {
+        this.showConfirmPopup = false;
+      };
+      document.querySelector('.confirm-btns .agree-btn').onclick = () => {
+        this.showConfirmPopup = false;
+        callback();
+      };
+    },
+
   },
 
   created() {
     if( localStorage.getItem("accessToken") === null ) return;
-    setTimeout( () => {
-      this.fetchContactFromApi('/contacts')
-        .then( response => {          
-          if (response.data.syncAt === null) {
-            this.syncContacts.data.syncAt = null;
-          } else {
-            this.syncContacts.data.syncAt = new Date(response.data.syncAt);
-          }          
-          this.syncContacts.data.contacts = response.data.contacts;
-          this.syncContacts.loading = false;
-        } )
-        .catch( () => {
-          return;
-        });
-
-      this.fetchContactFromApi('/google/contacts')
-        .then( response => {
-          this.googleContacts.loading = false;
-          this.googleContacts.data = response.data;
-        } )
-        .catch( () => {
-          return;
-        });
-
-      this.fetchContactFromApi('/outlook/contacts')
-        .then( response => {
-          this.outlookContacts.loading = false;
-          this.outlookContacts.data = response.data
-        } )
-        .catch( () => {
-          return;
-        });
+    this.syncContacts.loading = true;
+    setTimeout( async () => {
+      await this.loadContacts('YSC');
+      this.syncContacts.loading = false;
     }, 1000);
   },
-  
+
+  watch: {
+    typeContacts(type) {
+      this.showContacts = [];
+
+      if( type === 'YSC') {
+        console.log('YSC');
+        this.refreshYSCContacts();
+      }
+      else if( type === 'google' ) {
+        console.log('Google');
+        this.refreshGoogleContacts();
+      }
+      else if( type === 'outlook' ) {
+        console.log("Outlook");
+        this.refreshOutlookContacts();
+      }
+    },
+
+    checkedContacts(arrayChecked) {
+      if( arrayChecked.length !== 0 && arrayChecked.length === this.syncContacts.data.contacts.length ) {
+        this.allSelected = true;
+      }
+      else {
+        this.allSelected = false;
+      }
+    }
+  }
 }
 </script>
-
-<style scoped>
-.home {
-  display: flex;
-  margin: 3rem 0;
-  padding: 0 2rem;
-}
-
-.list-contacts {
-  width: 300px;
-  flex-grow: 1;
-  border-left: 1px solid #aaa;
-  min-height: 200px;
-  padding: 0 15px;
-}
-
-.list-contacts:last-child {
-  border-right: 1px solid #aaa;
-}
-
-.list-contacts .type {
-  text-align: center;
-}
-
-.list-contacts .contacts-btn {
-  text-align: center;
-}
-
-.list-contacts .load-contacts-btn {
-  margin-top: 10px;
-  display: inline-block;
-  height: 30px;
-  background-color: #192a56;
-  color: #fff;
-  line-height: 30px;
-  padding: 0 15px;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.list-contacts .load-contacts-btn:hover {
-  background-color: #46b04a;
-  transform: scale(1.02);
-}
-
-.list-contacts .sync-contacts-btn {
-  margin-top: 10px;
-  display: inline-block;
-  height: 30px;
-  background-color: #46b04a;
-  color: #fff;
-  line-height: 30px;
-  padding: 0 15px;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.list-contacts .sync-contacts-btn:hover {
-  background-color: #192a56;
-  transform: scale(1.02);
-}
-
-.list-contacts .contacts-content {
-  margin-top: 30px;
-}
-
-.contacts-content .loading {
-  font-size: 1.5rem;
-  font-weight: 600;
-  text-align: center;
-  margin-top: 40px;
-}
-
-.contacts-content .contact-item {
-  margin-top: 15px;
-}
-
-</style>
+<style src="../assets/css/bootstrap_homtest.css" scoped></style>
+<style src="../assets/css/Hometest.css" scoped></style>

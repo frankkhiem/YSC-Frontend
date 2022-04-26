@@ -34,8 +34,23 @@ const routes = [
         path: 'profile',
         name: 'Profile',
         component: () => import('../views/Profile')
+      },
+      {
+        path: 'home-test',
+        name: 'HomeTest',
+        component: () => import('../views/HomeTest')
       }
     ]
+  },
+  {
+    path: '/outlook/get-auth-code',
+    name: 'Outlook Code',
+    component: () => import('../views/OutlookCode')
+  },
+  {
+    path: '/zalo/get-auth-code',
+    name: 'Zalo Code',
+    component: () => import('../views/ZaloCode')
   },
   {
     path: '/*',
